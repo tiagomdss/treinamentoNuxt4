@@ -36,6 +36,8 @@ onMounted(() => {
         </RouterLink>
         <nav class="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-300">
           <RouterLink to="/" class="hover:text-gray-900 dark:hover:text-white">Início</RouterLink>
+          <RouterLink to="/migracao-php" class="hover:text-gray-900 dark:hover:text-white">PHP → Nuxt</RouterLink>
+          <RouterLink to="/exercicios" class="hover:text-gray-900 dark:hover:text-white">Exercícios</RouterLink>
           <RouterLink to="/sobre" class="hover:text-gray-900 dark:hover:text-white">Sobre</RouterLink>
           <a href="https://nuxt.com/docs" target="_blank" class="hover:text-gray-900 dark:hover:text-white">Docs</a>
           <button @click="toggleTheme" class="inline-flex items-center gap-2 rounded-md border border-gray-300 dark:border-gray-700 px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-800">
