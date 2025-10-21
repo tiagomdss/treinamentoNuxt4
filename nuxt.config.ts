@@ -1,49 +1,58 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { defineNuxtConfig } from 'nuxt/config'
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
+  devtools: { enabled: true },
+  
   modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxt/icon'
+    '@nuxt/icon',
+    '@nuxtjs/color-mode',
+    '@vueuse/nuxt'
   ],
-  // Inline PostCSS config per Nuxt recommendation
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    }
+
+  colorMode: {
+    preference: 'dark',
+    classSuffix: ''
   },
-  typescript: {
-    shim: false,
-    strict: true,
-    typeCheck: false
+
+  vite: {
+    plugins: [
+      tailwindcss()
+    ]
   },
+
+
   app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
-      title: 'Treinamento Nuxt 4 - Do PHP ao Nuxt',
+      title: 'Aprenda Nuxt 4 - Plataforma de Aprendizado Interativa',
       meta: [
+        { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Aprenda Nuxt 4 de forma didática e divertida. Migre do PHP tradicional para o mundo moderno do Vue e Nuxt!' }
+        { 
+          name: 'description', 
+          content: 'Aprenda Nuxt 4 de forma divertida e interativa! Descubra o framework Vue.js mais poderoso do planeta.' 
+        }
       ],
       link: [
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap' }
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
       ]
     }
   },
+
   css: [
-    '@/assets/css/tailwind.css'
+    '~/assets/css/main.css'
   ],
-  tailwindcss: {
-    viewer: false
+
+  typescript: {
+    strict: true,
+    typeCheck: false
   },
-  devServer: {
-    host: '0.0.0.0',
-    port: 3000
-  },
-  icon: {
-    serverBundle: {
-      collections: ['heroicons', 'lucide', 'mdi']
+
+  nitro: {
+    experimental: {
+      openAPI: true
     }
   }
 })
