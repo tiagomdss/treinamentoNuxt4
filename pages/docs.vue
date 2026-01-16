@@ -20,7 +20,7 @@
             Documentação <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Nuxt 4</span>
           </h1>
           <p class="text-xl text-slate-700 dark:text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
-            Sua jornada para dominar o framework Vue.js mais intuitivo e poderoso do ecossistema. 🚀
+            Sua jornada para dominar o framework Vue.js mais intuitivo e poderoso do ecossistema.. 🚀
           </p>
         </div>
           <!-- Tabs -->
@@ -79,7 +79,7 @@
                     class="text-slate-400 hover:text-[#00DC82] dark:text-gray-500 dark:hover:text-[#00DC82] transition-colors text-sm flex items-center gap-2 font-medium"
                   >
                     <Icon name="heroicons:clipboard-document" class="w-4 h-4" />
-                    Copiar
+                    Copiar 
                   </button>
                 </div>
                 <div v-if="section.codeHtml" v-html="section.codeHtml" class="[&>pre]:p-8 [&>pre]:overflow-x-auto [&>pre]:!bg-[#1E1E1E] text-sm font-mono leading-relaxed"></div>
