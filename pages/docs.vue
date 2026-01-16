@@ -82,7 +82,8 @@
                     Copiar
                   </button>
                 </div>
-                <pre class="p-8 overflow-x-auto"><code class="text-sm text-green-400 font-mono leading-relaxed">{{ section.code }}</code></pre>
+                <div v-if="section.codeHtml" v-html="section.codeHtml" class="[&>pre]:p-8 [&>pre]:overflow-x-auto [&>pre]:!bg-[#1E1E1E] text-sm font-mono leading-relaxed"></div>
+                <pre v-else class="p-8 overflow-x-auto"><code class="text-sm text-green-400 font-mono leading-relaxed">{{ section.code }}</code></pre>
               </div>
             </div>
           </div>
@@ -237,6 +238,44 @@ import MyComponent from '@/components/MyComponent.vue'
   },
   {
     category: 'core-concepts',
+    title: '🧩 Sintaxe de Template',
+    icon: 'heroicons:code-bracket',
+    description: 'Entenda as diretivas essenciais do Vue.js como v-for, v-bind e v-on.',
+    content: `O Vue estende o HTML com uma sintaxe de modelo que permite vincular declarativamente o DOM renderizado aos dados da instância do componente subjacente.
+
+**Principais Diretivas:**
+• {{ }} - Interpolação de texto
+• v-bind (:) - Vincular atributos
+• v-on (@) - Escutar eventos
+• v-if / v-else - Renderização condicional
+• v-for - Renderização de listas
+• v-model - Ligação bidirecional (two-way binding)`,
+    code: `<!-- Interpolação -->
+<h1>{{ mensagem }}</h1>
+
+<!-- Binding de Atributos (:atalho para v-bind) -->
+<img :src="imagemUrl" :alt="descricao">
+
+<!-- Eventos (@atalho para v-on) -->
+<button @click="contador++">Contagem: {{ contador }}</button>
+
+<!-- Condicional -->
+<p v-if="logado">Bem-vindo!</p>
+<p v-else>Faça login</p>
+
+<!-- Lista (Loop) -->
+<ul>
+  <li v-for="item in lista" :key="item.id">
+    {{ item.nome }}
+  </li>
+</ul>
+
+<!-- Two-way Binding -->
+<input v-model="texto" placeholder="Digite algo">
+<p>Você digitou: {{ texto }}</p>`
+  },
+  {
+    category: 'core-concepts',
     title: '🎨 Tailwind CSS',
     icon: 'heroicons:paint-brush',
     description: 'Estilize sua aplicação rapidamente com o framework CSS utilitário líder do mercado.',
@@ -368,8 +407,8 @@ const goToUser = (id) => {
   },
   {
     category: 'core-concepts',
-    title: '🔧 Server Components',
-    icon: 'heroicons:server',
+    title: '� Layouts',
+    icon: 'heroicons:window',
     description: 'Crie templates reutilizáveis para suas páginas com o sistema de layouts do Nuxt.',
     content: `Layouts permitem criar estruturas comuns (header, footer, sidebar) que envolvem suas páginas.
 
@@ -934,8 +973,74 @@ useSeoMeta({
   }
 ]
 
+const { highlight } = useShiki()
+const sectionData = ref(docSections.map(s => ({ ...s, codeHtml: '' })))
+
+onMounted(async () => {
+  for (const section of sectionData.value) {
+    let lang = 'vue'
+    const code = section.code.trim()
+    
+    // File Tree detection (YAML)
+    if (code.includes('├──') || code.includes('└──')) {
+      lang = 'yaml'
+    }
+    // Bash detection (Stricter)
+    else if (code.trim().startsWith('npm ') || code.trim().startsWith('npx ') || code.trim().startsWith('pnpm ') || code.includes('npm install') || code.includes('npm run') || code.includes('npx nuxi') || (code.trim().startsWith('#') && !code.includes('Dockerfile') && !code.includes('import ') && !code.includes('export '))) {
+      lang = 'bash'
+      if (code.includes('FROM ') || code.includes('RUN ')) lang = 'docker'
+    }
+    // TypeScript detection (Prioritized over Vue Fragments)
+    else if (!code.includes('<template>') && (
+      code.includes('export default') || 
+      code.includes('export const') || 
+      code.includes('interface ') || 
+      code.includes('import ') ||
+      code.includes('const ') ||
+      code.includes('let ') ||
+      code.includes('async ') ||
+      code.includes('definePageMeta') ||
+      code.includes('useRouter') ||
+      code.includes('useFetch') ||
+      code.includes('defineNuxtConfig')
+    )) {
+      lang = 'typescript'
+    }
+    // Force Vue if it has a script tag (SFC) - This ensures scripts are highlighted as TS
+    else if (code.includes('<script')) {
+      lang = 'vue'
+    }
+    // "Tutorial Style" Vue blocks (using <!-- <template> --> comments) - Pure template
+    else if (code.includes('<!-- <template> -->')) {
+      lang = 'vue-html'
+    }
+    // Vue Template Fragment detection (No <template> tag but has directives)
+    else if (!code.includes('<template>') && (code.includes('v-') || code.includes('{{') || code.includes('@click') || code.includes(':'))) {
+      lang = 'vue-html'
+    }
+    // Fallback detection
+    else if (code.includes('<template')) {
+      lang = 'vue'
+    }
+    // TOML detection
+    else if (code.includes('[build]') && code.includes('command =')) {
+      lang = 'toml'
+    }
+    // JSON detection
+    else if (code.startsWith('{') || code.startsWith('[')) {
+      lang = 'json'
+    }
+    
+    // Force specific overrides based on content signatures
+    if (section.title.includes('Dockerfile')) lang = 'docker'
+    if (code.includes('netlify.toml') || code.includes('wrangler.toml')) lang = 'toml'
+    
+    section.codeHtml = await highlight(section.code, lang)
+  }
+})
+
 const filteredSections = computed(() => {
-  return docSections.filter(section => section.category === activeTab.value)
+  return sectionData.value.filter(section => section.category === activeTab.value)
 })
 
 useHead({
