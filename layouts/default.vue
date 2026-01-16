@@ -45,8 +45,8 @@
           <div class="hidden md:flex items-center gap-2">
             <NuxtLink 
               to="/" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
+              active-class="bg-purple-800/70"
               exact
             >
               <Icon name="heroicons:home" class="w-5 h-5" />
@@ -54,71 +54,44 @@
             </NuxtLink>
             <NuxtLink 
               to="/docs" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
+              active-class="bg-purple-800/70"
             >
               <Icon name="heroicons:book-open" class="w-5 h-5" />
               <span>Documentação</span>
             </NuxtLink>
             <NuxtLink 
               to="/playground" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
+              active-class="bg-purple-800/70"
             >
               <Icon name="heroicons:code-bracket" class="w-5 h-5" />
               <span>Playground</span>
             </NuxtLink>
             <NuxtLink 
               to="/examples" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
+              active-class="bg-purple-800/70"
             >
               <Icon name="heroicons:rocket-launch" class="w-5 h-5" />
               <span>Exemplos</span>
             </NuxtLink>
             <NuxtLink 
               to="/quiz" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
+              active-class="bg-purple-800/70"
             >
               <Icon name="heroicons:academic-cap" class="w-5 h-5" />
               <span>Quiz</span>
             </NuxtLink>
             <NuxtLink 
               to="/migracao" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
+              active-class="bg-purple-800/70"
             >
               <Icon name="heroicons:arrow-path" class="w-5 h-5" />
               <span>Migração</span>
             </NuxtLink>
-            
-            <!-- Cyclic Theme Switcher -->
-            <button 
-              @click="cycleTheme" 
-              class="group relative p-2.5 rounded-xl text-slate-700 dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all ml-2 border border-transparent hover:border-slate-200 dark:hover:border-white/10"
-              :title="themeTitle"
-            >
-              <div class="relative w-5 h-5 flex items-center justify-center">
-                <Icon 
-                  v-if="colorMode.preference === 'dark'" 
-                  name="heroicons:moon-20-solid" 
-                  class="w-5 h-5 text-blue-400 animate-fade-in" 
-                />
-                <Icon 
-                  v-else-if="colorMode.preference === 'light'" 
-                  name="heroicons:sun-20-solid" 
-                  class="w-5 h-5 text-yellow-500 animate-fade-in" 
-                />
-                <Icon 
-                  v-else 
-                  name="heroicons:computer-desktop-20-solid" 
-                  class="w-5 h-5 text-emerald-500 animate-fade-in" 
-                />
-              </div>
-              <!-- Mini Indicator Badge -->
-              <span class="absolute -top-1 -right-1 w-2 h-2 rounded-full border-2 border-white dark:border-slate-900" :class="indicatorColor"></span>
-            </button>
           </div>
 
           <!-- Mobile Menu Button -->
@@ -138,7 +111,7 @@
           <NuxtLink 
             to="/" 
             @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all font-medium"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
           >
             <Icon name="heroicons:home" class="w-5 h-5" />
             <span>Início</span>
@@ -146,7 +119,7 @@
           <NuxtLink 
             to="/docs" 
             @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all font-medium"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
           >
             <Icon name="heroicons:book-open" class="w-5 h-5" />
             <span>Documentação</span>
@@ -154,7 +127,7 @@
           <NuxtLink 
             to="/playground" 
             @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all font-medium"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
           >
             <Icon name="heroicons:code-bracket" class="w-5 h-5" />
             <span>Playground</span>
@@ -162,7 +135,7 @@
           <NuxtLink 
             to="/examples" 
             @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all font-medium"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
           >
             <Icon name="heroicons:rocket-launch" class="w-5 h-5" />
             <span>Exemplos</span>
@@ -170,7 +143,7 @@
           <NuxtLink 
             to="/quiz" 
             @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all font-medium"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
           >
             <Icon name="heroicons:academic-cap" class="w-5 h-5" />
             <span>Quiz</span>
@@ -178,39 +151,11 @@
           <NuxtLink 
             to="/migracao" 
             @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all font-medium"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-purple-800/50 transition-colors"
           >
             <Icon name="heroicons:arrow-path" class="w-5 h-5" />
             <span>Migração</span>
           </NuxtLink>
-          
-          <!-- Mobile Theme Selector -->
-          <div class="px-4 py-3 grid grid-cols-3 gap-2">
-             <button 
-               @click="colorMode.preference = 'light'"
-               class="p-3 rounded-xl border flex flex-col items-center gap-2 transition-all"
-               :class="colorMode.preference === 'light' ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600' : 'bg-black/5 dark:bg-white/5 border-transparent text-slate-500'"
-             >
-                <Icon name="heroicons:sun-20-solid" class="w-5 h-5" />
-                <span class="text-[10px] font-bold">Claro</span>
-             </button>
-             <button 
-               @click="colorMode.preference = 'dark'"
-               class="p-3 rounded-xl border flex flex-col items-center gap-2 transition-all"
-               :class="colorMode.preference === 'dark' ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600' : 'bg-black/5 dark:bg-white/5 border-transparent text-slate-500'"
-             >
-                <Icon name="heroicons:moon-20-solid" class="w-5 h-5" />
-                <span class="text-[10px] font-bold">Escuro</span>
-             </button>
-             <button 
-               @click="colorMode.preference = 'system'"
-               class="p-3 rounded-xl border flex flex-col items-center gap-2 transition-all"
-               :class="colorMode.preference === 'system' ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600' : 'bg-black/5 dark:bg-white/5 border-transparent text-slate-500'"
-             >
-                <Icon name="heroicons:computer-desktop-20-solid" class="w-5 h-5" />
-                <span class="text-[10px] font-bold">Auto</span>
-             </button>
-          </div>
         </div>
       </div>
     </nav>
@@ -276,27 +221,5 @@ function toggleMenu() {
 
 function closeMenu() {
   isMenuOpen.value = false
-}
-
-const themeTitle = computed(() => {
-  if (colorMode.preference === 'dark') return 'Modo Escuro (Clique para Auto)'
-  if (colorMode.preference === 'light') return 'Modo Claro (Clique para Escuro)'
-  return 'Automático (Clique para Claro)'
-})
-
-const indicatorColor = computed(() => {
-  if (colorMode.preference === 'dark') return 'bg-blue-400'
-  if (colorMode.preference === 'light') return 'bg-yellow-500'
-  return 'bg-emerald-500'
-})
-
-function cycleTheme() {
-  if (colorMode.preference === 'system') {
-    colorMode.preference = 'light'
-  } else if (colorMode.preference === 'light') {
-    colorMode.preference = 'dark'
-  } else {
-    colorMode.preference = 'system'
-  }
 }
 </script>
