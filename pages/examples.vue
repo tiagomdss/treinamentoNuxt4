@@ -1,98 +1,108 @@
 <template>
-  <div>
+  <div class="relative min-h-screen bg-[#F8FAFC] dark:bg-[#020420] overflow-hidden transition-colors duration-500">
+    <!-- Cosmic Background Blobs -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#34d399]/20 dark:bg-[#10b981]/15 rounded-full blur-[100px] animate-[float_20s_infinite_ease-in-out]"></div>
+      <div class="absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-[#60a5fa]/20 dark:bg-[#2563eb]/10 rounded-full blur-[100px] animate-[float_25s_infinite_ease-in-out_reverse]"></div>
+      <div class="absolute bottom-[-10%] right-[-5%] w-[700px] h-[600px] bg-[#c084fc]/20 dark:bg-[#7c3aed]/10 rounded-full blur-[100px] animate-[float_20s_infinite_ease-in-out]"></div>
+    </div>
 
     <!-- Content -->
-    <div class="container mx-auto px-4 py-12">
-      <div class="max-w-6xl mx-auto">
+    <div class="container mx-auto px-4 py-20 relative z-10">
+      <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="text-center mb-12">
-          <div class="inline-block px-4 py-2 bg-pink-600/80 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-6">
-            🎨 Projetos Práticos
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-emerald-400/10 border border-slate-200 dark:border-white/10 mb-8 backdrop-blur-md">
+            <Icon name="heroicons:sparkles" class="w-5 h-5 text-emerald-600" />
+            <span class="text-emerald-700 dark:text-[#00DC82] font-semibold text-sm tracking-wide uppercase">Inspiração & Projetos</span>
           </div>
-          <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Exemplos Práticos</h1>
-          <p class="text-xl text-purple-200 mb-8">
-            Explore projetos completos construídos com Nuxt 4 e aprenda na prática!
+          <h1 class="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
+            Exemplos <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Práticos</span>
+          </h1>
+          <p class="text-xl text-slate-700 dark:text-slate-400 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+            Explore projetos reais e referências mundiais que utilizam tecnologias de ponta.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div 
             v-for="example in examples" 
             :key="example.title"
-            class="bg-purple-900/50 backdrop-blur-sm border-2 border-purple-500/30 hover:border-purple-400/50 transition-all hover:shadow-xl hover:shadow-purple-500/20 rounded-xl overflow-hidden"
+            class="group bg-white/65 dark:bg-white/[0.03] backdrop-blur-xl border border-white dark:border-white/10 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:border-emerald-500/30 shadow-glass hover:shadow-2xl hover:-translate-y-2"
           >
-            <div class="p-6">
-              <div class="flex items-start justify-between mb-4">
-                <div class="flex items-center gap-3">
-                  <div class="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl">
-                    <Icon :name="example.icon" class="w-6 h-6 text-white" />
-                  </div>
-                  <h3 class="text-xl font-bold text-white">{{ example.title }}</h3>
-                </div>
+            <!-- Preview Image -->
+            <div class="aspect-video relative overflow-hidden bg-slate-200 dark:bg-slate-800 border-b border-slate-200 dark:border-white/5">
+              <img 
+                :src="example.image" 
+                :alt="example.title"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <span class="text-white text-sm font-medium flex items-center gap-2">
+                  <Icon name="heroicons:eye" class="w-4 h-4" />
+                  Ver Detalhes
+                </span>
+              </div>
+              <div class="absolute top-4 right-4 animate-pulse">
                 <span 
                   v-if="example.badge"
                   :class="[
-                    'px-3 py-1 rounded-full text-xs font-semibold',
+                    'px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg backdrop-blur-md border transition-colors',
                     example.badge === 'Projeto Pessoal' 
-                      ? 'bg-green-600/80 text-white' 
-                      : 'bg-blue-600/80 text-white'
+                      ? 'bg-[#00DC82] text-slate-900 border-[#00DC82]/20' 
+                      : 'bg-purple-500 text-white border-purple-400/20'
                   ]"
                 >
                   {{ example.badge }}
                 </span>
               </div>
+            </div>
+
+            <div class="p-8">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 bg-[#00DC82]/10 rounded-xl flex items-center justify-center border border-[#00DC82]/20 group-hover:scale-110 transition-transform">
+                  <Icon :name="example.icon" class="w-6 h-6 text-[#00DC82]" />
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{{ example.title }}</h3>
+              </div>
               
-              <p class="text-purple-200 mb-4">{{ example.description }}</p>
+              <p class="text-slate-600 dark:text-gray-400 mb-8 font-light leading-relaxed min-h-[4rem] line-clamp-2">
+                {{ example.description }}
+              </p>
               
-              <div class="space-y-2 mb-4">
-                <div class="text-sm text-purple-300 font-semibold">Tecnologias:</div>
+              <div class="space-y-6">
                 <div class="flex flex-wrap gap-2">
                   <span 
                     v-for="tech in example.technologies" 
                     :key="tech"
-                    class="px-2 py-1 bg-purple-800/50 text-purple-200 text-xs rounded-full"
+                    class="px-3 py-1 bg-slate-200/50 dark:bg-white/5 text-slate-500 dark:text-gray-400 text-xs rounded-lg border border-slate-300 dark:border-white/5 group-hover:border-[#00DC82]/20 transition-colors"
                   >
                     {{ tech }}
                   </span>
                 </div>
-              </div>
-              
-              <div class="space-y-2">
-                <div class="text-sm text-purple-300 font-semibold">Você vai aprender:</div>
-                <ul class="space-y-1">
-                  <li 
-                    v-for="learning in example.learnings" 
-                    :key="learning"
-                    class="text-purple-100 text-sm flex items-start gap-2"
+                
+                <div class="pt-6 border-t border-slate-200 dark:border-white/5 flex gap-4">
+                  <a 
+                    v-if="example.demo"
+                    :href="example.demo" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex-1 px-6 py-3 bg-[#00DC82] hover:bg-[#00c976] text-slate-900 font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,220,130,0.3)] flex items-center justify-center gap-2"
                   >
-                    <Icon name="heroicons:check-circle" class="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                    <span>{{ learning }}</span>
-                  </li>
-                </ul>
+                    <Icon name="heroicons:globe-alt" class="w-5 h-5" />
+                    Visitar Site
+                  </a>
+                  <a 
+                    v-if="example.github"
+                    :href="example.github" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="px-5 py-3 bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 text-slate-700 dark:text-white font-bold rounded-xl transition-all border border-slate-200 dark:border-white/10 flex items-center justify-center gap-2 group/btn"
+                  >
+                    <Icon name="simple-icons:github" class="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                  </a>
+                </div>
               </div>
-            </div>
-            
-            <div class="px-6 py-4 bg-purple-950/50 border-t border-purple-500/30 flex gap-3">
-              <a 
-                v-if="example.demo"
-                :href="example.demo" 
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex-1 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2"
-              >
-                <Icon name="heroicons:play" class="w-4 h-4" />
-                Demo
-              </a>
-              <a 
-                v-if="example.github"
-                :href="example.github" 
-                target="_blank"
-                rel="noopener noreferrer"
-                class="px-4 py-2 bg-purple-900/50 hover:bg-purple-800/50 text-white font-semibold rounded-lg transition-all border border-purple-500/30 flex items-center gap-2"
-              >
-                <Icon name="heroicons:code-bracket" class="w-4 h-4" />
-                GitHub
-              </a>
             </div>
           </div>
         </div>
@@ -104,16 +114,11 @@
 <script setup lang="ts">
 const examples = [
   {
-    title: 'martinsds.dev.br',
+    title: 'Tiago Martins Portfolio',
     icon: 'heroicons:user-circle',
-    description: 'Site pessoal com portfólio e projetos desenvolvidos',
-    technologies: ['Nuxt 4', 'TypeScript', 'Tailwind CSS'],
-    learnings: [
-      'Portfolio moderno',
-      'Animações suaves',
-      'SEO otimizado',
-      'Performance A+'
-    ],
+    description: 'Site pessoal de alta performance focado em tecnologias modernas e UX.',
+    technologies: ['Nuxt 4', 'TypeScript', 'Tailwind CSS', 'Vite'],
+    image: '/img/examples/martinsds.png',
     demo: 'https://martinsds.dev.br',
     github: 'https://github.com/tiagomdss/martinsds.dev.br',
     badge: 'Projeto Pessoal'
@@ -121,44 +126,29 @@ const examples = [
   {
     title: 'Louis Vuitton',
     icon: 'heroicons:shopping-bag',
-    description: 'E-commerce de luxo com experiência premium e animações sofisticadas',
-    technologies: ['Vue.js', 'Animations', 'E-commerce'],
-    learnings: [
-      'Animações complexas',
-      'UX premium',
-      'Performance otimizada',
-      'Design responsivo'
-    ],
+    description: 'Experiência de luxo digital com animações sofisticadas e design premium.',
+    technologies: ['Vue.js', 'Premium UX', 'E-commerce'],
+    image: '/img/examples/lv.png',
     demo: 'https://br.louisvuitton.com/por-br/homepage',
     github: '',
     badge: 'Referência'
   },
   {
-    title: 'GV (Google Ventures)',
+    title: 'Google Ventures (GV)',
     icon: 'heroicons:light-bulb',
-    description: 'Site institucional com design minimalista e tipografia impecável',
-    technologies: ['Modern Web', 'Typography', 'Minimalism'],
-    learnings: [
-      'Design minimalista',
-      'Tipografia avançada',
-      'Layout clean',
-      'Storytelling visual'
-    ],
+    description: 'Design minimalista e tipografia impecável para o mundo corporativo moderno.',
+    technologies: ['Modern Web', 'Minimalism', 'Typography'],
+    image: '/img/examples/gv.png',
     demo: 'https://www.gv.com',
     github: '',
     badge: 'Referência'
   },
   {
-    title: 'Microsoft Edge',
-    icon: 'heroicons:globe-alt',
-    description: 'Landing page moderna com recursos interativos e documentação completa',
-    technologies: ['Microsoft', 'Documentation', 'Interactive'],
-    learnings: [
-      'Documentação técnica',
-      'Recursos interativos',
-      'Design system',
-      'Acessibilidade'
-    ],
+    title: 'Microsoft Edge Dev',
+    icon: 'heroicons:code-bracket',
+    description: 'Documentação técnica moderna e recursos interativos avançados.',
+    technologies: ['Design System', 'Acessibilidade', 'Tech Content'],
+    image: '/img/examples/edge.png',
     demo: 'https://developer.microsoft.com/en-us/microsoft-edge?form=MA13LH',
     github: '',
     badge: 'Referência'
@@ -166,14 +156,9 @@ const examples = [
   {
     title: 'GitLab',
     icon: 'heroicons:code-bracket-square',
-    description: 'Plataforma DevOps com interface complexa e funcionalidades avançadas',
-    technologies: ['DevOps', 'CI/CD', 'Collaboration'],
-    learnings: [
-      'Interface complexa',
-      'Colaboração em tempo real',
-      'CI/CD pipelines',
-      'Git workflows'
-    ],
+    description: 'Interface complexa e robusta para fluxos de trabalho DevOps avançados.',
+    technologies: ['DevOps', 'Collaboration', 'Scalability'],
+    image: '/img/examples/gitlab.png',
     demo: 'https://about.gitlab.com',
     github: '',
     badge: 'Referência'
@@ -181,29 +166,19 @@ const examples = [
   {
     title: 'Armani',
     icon: 'heroicons:sparkles',
-    description: 'E-commerce de moda com galeria de produtos e experiência visual elegante',
-    technologies: ['Fashion', 'E-commerce', 'Luxury'],
-    learnings: [
-      'Galeria de produtos',
-      'Experiência visual',
-      'Filtros avançados',
-      'Checkout otimizado'
-    ],
+    description: 'E-commerce de moda elegante com foco absoluto em estética e fluidez.',
+    technologies: ['Luxury Fashion', 'E-commerce', 'Animations'],
+    image: '/img/examples/armani.png',
     demo: 'https://www.armani.com/en-wx/',
     github: '',
     badge: 'Referência'
   },
   {
-    title: 'Blog com Nuxt Content',
+    title: 'Nuxt Content',
     icon: 'heroicons:document-text',
-    description: 'Sistema de gerenciamento de conteúdo baseado em arquivos com Markdown e Vue components',
-    technologies: ['Nuxt Content', 'Markdown', 'MDC'],
-    learnings: [
-      'Content management system',
-      'Markdown com componentes Vue',
-      'Query builder poderoso',
-      'Syntax highlighting automático'
-    ],
+    description: 'CMS baseado em Git para projetos Nuxt com Markdown e MDC. Poderoso e flexível.',
+    technologies: ['Open Source', 'Nuxt Module', 'Git-based'],
+    image: '/img/examples/nuxt-content.png',
     demo: 'https://content.nuxt.com',
     github: 'https://github.com/nuxt/content',
     badge: 'Oficial'

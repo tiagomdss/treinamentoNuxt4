@@ -2,8 +2,9 @@
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
+  compatibilityDate: '2026-01-15',
   devtools: { enabled: true },
-  
+
   modules: [
     '@nuxt/icon',
     '@nuxtjs/color-mode',
@@ -11,7 +12,8 @@ export default defineNuxtConfig({
   ],
 
   colorMode: {
-    preference: 'dark',
+    preference: 'system',
+    fallback: 'dark',
     classSuffix: ''
   },
 
@@ -30,13 +32,13 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { 
-          name: 'description', 
-          content: 'Aprenda Nuxt 4 de forma divertida e interativa! Descubra o framework Vue.js mais poderoso do planeta.' 
+        {
+          name: 'description',
+          content: 'Aprenda Nuxt 4 de forma divertida e interativa! Descubra o framework Vue.js mais poderoso do planeta.'
         }
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' }
       ]
     }
   },

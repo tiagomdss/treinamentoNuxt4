@@ -1,76 +1,88 @@
 <template>
-  <div>
+  <div class="relative min-h-screen bg-[#F8FAFC] dark:bg-[#020420] overflow-hidden transition-colors duration-500">
+    <!-- Cosmic Background Blobs -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#34d399]/20 dark:bg-[#10b981]/15 rounded-full blur-[100px] animate-[float_20s_infinite_ease-in-out]"></div>
+      <div class="absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-[#60a5fa]/20 dark:bg-[#2563eb]/10 rounded-full blur-[100px] animate-[float_25s_infinite_ease-in-out_reverse]"></div>
+      <div class="absolute bottom-[-10%] right-[-5%] w-[700px] h-[600px] bg-[#c084fc]/20 dark:bg-[#7c3aed]/10 rounded-full blur-[100px] animate-[float_20s_infinite_ease-in-out]"></div>
+    </div>
 
     <!-- Content -->
-    <div class="container mx-auto px-4 py-12">
+    <div class="container mx-auto px-4 py-20 relative z-10">
       <div class="max-w-6xl mx-auto">
         <!-- Header -->
-        <div class="text-center mb-12">
-          <div class="inline-block px-4 py-2 bg-purple-600/80 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-6">
-            📚 Guia Completo
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-emerald-400/10 border border-slate-200 dark:border-white/10 mb-8 backdrop-blur-md">
+            <Icon name="heroicons:book-open" class="w-5 h-5 text-emerald-600" />
+            <span class="text-emerald-700 dark:text-[#00DC82] font-semibold text-sm tracking-wide uppercase">Guia Completo</span>
           </div>
-          <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Guia Completo Nuxt 4</h1>
-          <p class="text-xl text-purple-200 mb-8">
-            Aprenda tudo sobre Nuxt 4 de forma estruturada e divertida!
+          <h1 class="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
+            Documentação <span class="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Nuxt 4</span>
+          </h1>
+          <p class="text-xl text-slate-700 dark:text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
+            Sua jornada para dominar o framework Vue.js mais intuitivo e poderoso do ecossistema. 🚀
           </p>
-          
+        </div>
           <!-- Tabs -->
-          <div class="flex items-center justify-center gap-3 flex-wrap mb-12">
+          <div class="flex items-center justify-center gap-4 flex-wrap mb-16 px-4">
             <button
               v-for="tab in tabs"
               :key="tab.id"
               @click="activeTab = tab.id"
               :class="[
-                'px-6 py-2 rounded-full font-medium transition-all',
+                'px-8 py-3 rounded-xl font-bold transition-all duration-300 backdrop-blur-md border shadow-sm',
                 activeTab === tab.id
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-purple-900/30 text-purple-300 hover:bg-purple-800/50'
+                  ? 'bg-[#00DC82] text-slate-900 border-[#00DC82] shadow-[0_0_20px_rgba(0,220,130,0.3)] scale-105'
+                  : 'bg-slate-100/80 dark:bg-white/5 text-slate-500 dark:text-gray-400 border-black/5 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'
               ]"
             >
               {{ tab.label }}
             </button>
           </div>
-        </div>
 
-        <div class="space-y-8">
+        <div class="space-y-12">
           <div 
             v-for="section in filteredSections" 
             :key="section.title"
-            class="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-xl overflow-hidden"
+            class="group bg-slate-50 dark:bg-white/[0.03] backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:border-[#00DC82]/30 shadow-sm hover:shadow-2xl"
           >
             <!-- Header -->
-            <div class="bg-purple-900/50 p-6 border-b border-purple-500/30">
-              <div class="flex items-start gap-4">
-                <div class="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex-shrink-0">
-                  <Icon :name="section.icon" class="w-6 h-6 text-white" />
+            <div class="p-10 border-b border-slate-200 dark:border-white/5 bg-white/50 dark:bg-white/[0.01]">
+              <div class="flex flex-col md:flex-row items-start gap-8">
+                <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+                  <Icon :name="section.icon" class="w-8 h-8 text-emerald-600 dark:text-[#00DC82]" />
                 </div>
                 <div class="flex-1">
-                  <h2 class="text-3xl font-bold text-white mb-3">{{ section.title }}</h2>
-                  <p class="text-purple-200 text-lg">{{ section.description }}</p>
+                  <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">{{ section.title }}</h2>
+                  <p class="text-slate-700 dark:text-slate-300 text-lg font-light leading-relaxed">{{ section.description }}</p>
                 </div>
               </div>
             </div>
             
             <!-- Content -->
-            <div class="p-6 space-y-6">
+            <div class="p-10 space-y-8">
               <!-- Description -->
-              <div class="text-purple-100 leading-relaxed whitespace-pre-line">
+              <div class="text-slate-700 dark:text-gray-300 leading-relaxed whitespace-pre-line text-lg font-light">
                 {{ section.content }}
               </div>
               
               <!-- Code Block -->
-              <div class="bg-gray-950 border border-purple-500/20 rounded-lg overflow-hidden">
-                <div class="bg-purple-950/50 px-4 py-2 border-b border-purple-500/20 flex items-center justify-between">
-                  <span class="text-purple-300 text-sm font-mono">Código</span>
+              <div class="bg-slate-900 dark:bg-black/40 border border-black/10 dark:border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+                <div class="bg-slate-800 dark:bg-white/5 px-6 py-3 border-b border-black/10 dark:border-white/5 flex items-center justify-between">
+                  <div class="flex gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500/40"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/40"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/40"></div>
+                  </div>
                   <button 
                     @click="copyCode(section.code)"
-                    class="text-purple-400 hover:text-purple-300 transition-colors text-sm flex items-center gap-2"
+                    class="text-slate-400 hover:text-[#00DC82] dark:text-gray-500 dark:hover:text-[#00DC82] transition-colors text-sm flex items-center gap-2 font-medium"
                   >
                     <Icon name="heroicons:clipboard-document" class="w-4 h-4" />
                     Copiar
                   </button>
                 </div>
-                <pre class="p-4 overflow-x-auto"><code class="text-sm text-green-400 font-mono leading-relaxed">{{ section.code }}</code></pre>
+                <pre class="p-8 overflow-x-auto"><code class="text-sm text-green-400 font-mono leading-relaxed">{{ section.code }}</code></pre>
               </div>
             </div>
           </div>
@@ -200,6 +212,78 @@ export default defineNuxtConfig({
     }
   }
 })`
+  },
+  {
+    category: 'core-concepts',
+    title: '🔗 Aliases (@ e ~)',
+    icon: 'heroicons:link',
+    description: 'Entenda como funcionam os atalhos de importação do Nuxt para um código mais limpo.',
+    content: `No Nuxt, o símbolo @ (ou ~) é um alias que aponta para a raiz do seu projeto. Isso evita caminhos relativos complexos (../../..) e torna suas importações muito mais estáveis.
+
+**Por que usar:**
+• Evita erros ao mover arquivos de pasta
+• Código mais curto e legível
+• Funciona em arquivos CSS, JS e Vue`,
+    code: `// Sem alias (Caminho relativo difícil)
+import MyComponent from '../../components/MyComponent.vue'
+
+// Com alias (Limpo e estável)
+import MyComponent from '@/components/MyComponent.vue'
+
+// Também funciona no CSS
+.minha-classe {
+  background: url('@/assets/images/logo.png');
+}`
+  },
+  {
+    category: 'core-concepts',
+    title: '🎨 Tailwind CSS',
+    icon: 'heroicons:paint-brush',
+    description: 'Estilize sua aplicação rapidamente com o framework CSS utilitário líder do mercado.',
+    content: `O Nuxt 4 integra-se perfeitamente com o Tailwind CSS, permitindo criar designs modernos sem sair do seu arquivo HTML.
+
+**Vantagens:**
+• Desenvolvimento ultra-rápido
+• Zero conflito de classes
+• Design system consistente por padrão`,
+    code: `<!-- Exemplo de componentes com Tailwind -->
+<div class="p-6 max-w-sm mx-auto bg-white/5 rounded-xl border border-white/10 backdrop-blur-xl flex items-center space-x-4">
+  <div class="shrink-0">
+    <Icon name="heroicons:rocket-launch" class="h-12 w-12 text-green-500" />
+  </div>
+  <div>
+    <div class="text-xl font-medium text-white">Nuxt 4 + Tailwind</div>
+    <p class="text-slate-400 text-sm">Design líquido e responsivo!</p>
+  </div>
+</div>`
+  },
+  {
+    category: 'advanced',
+    title: '📘 TypeScript de Elite',
+    icon: 'heroicons:code-bracket-square',
+    description: 'Desenvolva com confiança absoluta usando o suporte de primeira classe do Nuxt para TypeScript.',
+    content: `O Nuxt 4 é escrito em TypeScript e gera automaticamente definições de tipos para suas rotas, componentes e módulos.
+
+**O que você ganha:**
+• Auto-complete inteligente no VS Code
+• Erros detectados antes mesmo de salvar
+• Refatoração segura e previsível`,
+    code: `<script setup lang="ts">
+interface User {
+  id: number
+  name: string
+  role: 'admin' | 'user'
+}
+
+// O Nuxt infere os tipos automaticamente!
+const user = ref<User | null>(null)
+
+const loadUser = async (id: number) => {
+  // useFetch já sabe o tipo esperado!
+  const { data } = await useFetch<User>(\`/api/users/\${id}\`)
+  user.value = data.value
+}
+<\/script>`
   },
   {
     category: 'core-concepts',
