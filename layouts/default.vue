@@ -61,6 +61,22 @@
               <span>Documentação</span>
             </NuxtLink>
             <NuxtLink 
+              to="/typescript" 
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
+              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+            >
+              <Icon name="heroicons:code-bracket-square" class="w-5 h-5" />
+              <span>TypeScript</span>
+            </NuxtLink>
+            <NuxtLink 
+              to="/tailwind" 
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
+              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+            >
+              <Icon name="simple-icons:tailwindcss" class="w-5 h-5" />
+              <span>Tailwind</span>
+            </NuxtLink>
+            <NuxtLink 
               to="/playground" 
               class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
               active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
@@ -84,6 +100,7 @@
               <Icon name="heroicons:academic-cap" class="w-5 h-5" />
               <span>Quiz</span>
             </NuxtLink>
+
             <NuxtLink 
               to="/migracao" 
               class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
@@ -152,6 +169,22 @@
             <span>Documentação</span>
           </NuxtLink>
           <NuxtLink 
+            to="/typescript" 
+            @click="closeMenu"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
+          >
+            <Icon name="heroicons:code-bracket-square" class="w-5 h-5" />
+            <span>TypeScript</span>
+          </NuxtLink>
+          <NuxtLink 
+            to="/tailwind" 
+            @click="closeMenu"
+            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
+          >
+            <Icon name="simple-icons:tailwindcss" class="w-5 h-5" />
+            <span>Tailwind</span>
+          </NuxtLink>
+          <NuxtLink 
             to="/playground" 
             @click="closeMenu"
             class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
@@ -175,6 +208,7 @@
             <Icon name="heroicons:academic-cap" class="w-5 h-5" />
             <span>Quiz</span>
           </NuxtLink>
+
           <NuxtLink 
             to="/migracao" 
             @click="closeMenu"

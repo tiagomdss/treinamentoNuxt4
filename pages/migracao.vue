@@ -72,20 +72,18 @@
                     </div>
                   </div>
                   <div class="space-y-6">
-                    <div class="bg-slate-950 rounded-[2rem] p-8 border border-white/5 overflow-hidden group">
-                       <div class="flex justify-between items-center mb-6">
-                          <span class="text-[10px] font-bold text-emerald-500/40 uppercase tracking-widest">Handler_Architecture.ts</span>
-                          <span class="animate-pulse w-2 h-2 rounded-full bg-emerald-500"></span>
-                       </div>
-                       <pre class="text-sm font-mono text-emerald-400 group-hover:text-white transition-colors"><code><span class="text-slate-600">// Tipagem automática do Evento</span>
+                    <CodeBlock 
+                       code="// Tipagem automática do Evento
 export default defineEventHandler(async (event) => {
-  <span class="text-blue-400">const</span> method = event.method
-  <span class="text-blue-400">const</span> body = <span class="text-blue-400">await</span> readBody(event)
+  const method = event.method
+  const body = await readBody(event)
   
-  <span class="text-slate-600">// Middleware nativo sem .htaccess</span>
-  <span class="text-blue-400">return</span> { status: <span class="text-emerald-200">'success'</span>, data: body }
-})</code></pre>
-                    </div>
+  // Middleware nativo sem .htaccess
+  return { status: 'success', data: body }
+})"
+                       filename="Handler_Architecture.ts"
+                       class="text-sm shadow-2xl"
+                    />
                     <div class="p-6 bg-blue-500/5 border border-blue-500/20 rounded-2xl">
                        <h5 class="text-sm font-bold text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-2">
                          <Icon name="heroicons:light-bulb" class="w-4 h-4" />
@@ -179,21 +177,29 @@ export default defineEventHandler(async (event) => {
                    <div class="grid md:grid-cols-2 gap-12">
                       <div class="space-y-6">
                          <h4 class="text-xl font-bold dark:text-emerald-400 text-emerald-600">Era Legada (PHP)</h4>
-                         <div class="bg-red-500/5 border border-red-500/10 p-6 rounded-2xl font-mono text-xs text-red-400 leading-relaxed">
-                            $sql = "SELECT id, nome FROM usuarios WHERE id = " . $_GET['id'];<br/>
-                            $res = $conn->query($sql);<br/>
-                            $data = $res->fetch_assoc();
-                            <p class="mt-4 text-[9px] dark:text-red-500/40 text-red-600/40">// Perigo: SQL Injection e Tipagem Manual</p>
-                         </div>
+                          <CodeBlock 
+                             code="$sql = 'SELECT id, nome FROM usuarios WHERE id = ' . $_GET['id'];
+$res = $conn->query($sql);
+$data = $res->fetch_assoc();
+
+// Perigo: SQL Injection e Tipagem Manual"
+                             lang="php"
+                             filename="legacy_code.php"
+                             class="text-xs"
+                          />
                       </div>
                       <div class="space-y-6">
                          <h4 class="text-xl font-bold dark:text-blue-400 text-blue-600">Era Nuxt 4 (Prisma/DB)</h4>
-                         <div class="bg-blue-500/5 border border-blue-500/10 p-6 rounded-2xl font-mono text-xs text-blue-400 leading-relaxed">
-                            const user = await db.user.findUnique({<br/>
-                            &nbsp;&nbsp;where: { id: Number(query.id) }<br/>
-                            });
-                            <p class="mt-4 text-[9px] dark:text-blue-500/40 text-blue-600/40">// Seguro: Type-Safe, Prepared Statements Automáticos</p>
-                         </div>
+                          <CodeBlock 
+                             code="const user = await db.user.findUnique({
+  where: { id: Number(query.id) }
+});
+
+// Seguro: Type-Safe, Prepared Statements Automáticos"
+                             lang="typescript"
+                             filename="modern_db.ts"
+                             class="text-xs"
+                          />
                       </div>
                    </div>
 

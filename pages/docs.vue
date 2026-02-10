@@ -67,23 +67,11 @@
               </div>
               
               <!-- Code Block -->
-              <div class="bg-slate-900 dark:bg-black/40 border border-black/10 dark:border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-                <div class="bg-slate-800 dark:bg-white/5 px-6 py-3 border-b border-black/10 dark:border-white/5 flex items-center justify-between">
-                  <div class="flex gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-500/40"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500/40"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500/40"></div>
-                  </div>
-                  <button 
-                    @click="copyCode(section.code)"
-                    class="text-slate-400 hover:text-[#00DC82] dark:text-gray-500 dark:hover:text-[#00DC82] transition-colors text-sm flex items-center gap-2 font-medium"
-                  >
-                    <Icon name="heroicons:clipboard-document" class="w-4 h-4" />
-                    Copiar
-                  </button>
-                </div>
-                <pre class="p-8 overflow-x-auto"><code class="text-sm text-green-400 font-mono leading-relaxed">{{ section.code }}</code></pre>
-              </div>
+              <!-- Code Block -->
+              <CodeBlock 
+                :code="section.code" 
+                class="shadow-2xl text-sm"
+              />
             </div>
           </div>
         </div>
@@ -102,14 +90,7 @@ const tabs = [
   { id: 'deployment', label: 'Deployment' }
 ]
 
-const copyCode = async (code: string) => {
-  try {
-    await navigator.clipboard.writeText(code)
-    alert('Código copiado!')
-  } catch (err) {
-    console.error('Erro ao copiar:', err)
-  }
-}
+
 
 const docSections = [
   {
