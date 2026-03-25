@@ -260,7 +260,7 @@ $data = $res->fetch_assoc();
              A migração é apenas o começo. Domine os conceitos acima e você estará pronto para construir as interfaces do futuro.
            </p>
            <div class="flex flex-wrap gap-4 justify-center">
-              <NuxtLink to="/quiz" class="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl transition-all shadow-lg shadow-emerald-500/20">
+              <NuxtLink to="/jogos" class="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl transition-all shadow-lg shadow-emerald-500/20">
                 Testar Meus Conhecimentos
               </NuxtLink>
               <NuxtLink to="/" class="px-8 py-4 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold rounded-2xl border border-slate-200 dark:border-white/10 hover:bg-white transition-all">

@@ -32,7 +32,7 @@
         <div class="flex items-center justify-between">
           <!-- Logo -->
           <NuxtLink to="/" class="flex items-center gap-3 group">
-            <div class="relative h-14 flex items-center justify-center transition-transform group-hover:scale-105 duration-300">
+            <div class="relative h-20 flex items-center justify-center transition-transform group-hover:scale-105 duration-300">
                <img 
                 :src="colorMode.value === 'dark' ? '/logo-dark.png' : '/logo-light.png'" 
                 alt="Aprenda Nuxt 4" 
@@ -45,60 +45,85 @@
           <div class="hidden md:flex items-center gap-2">
             <NuxtLink 
               to="/" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all duration-300"
               active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
               exact
             >
               <Icon name="heroicons:home" class="w-5 h-5" />
               <span>Início</span>
             </NuxtLink>
+
+            <!-- PHP Dropdown -->
+            <div class="relative" ref="phpMenuRef">
+              <button 
+                @click="isPhpMenuOpen = !isPhpMenuOpen"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all duration-300"
+              >
+                <Icon name="vscode-icons:file-type-php" class="w-5 h-5" />
+                <span class="font-bold">PHP</span>
+                <Icon name="heroicons:chevron-down" class="w-4 h-4 ml-1 opacity-50 transition-transform" :class="isPhpMenuOpen ? 'rotate-180' : ''" />
+              </button>
+              
+              <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <div v-if="isPhpMenuOpen" class="absolute left-0 mt-2 w-56 origin-top-left rounded-xl bg-white dark:bg-slate-900 shadow-lg ring-1 ring-slate-200 dark:ring-white/10 focus:outline-none z-50 p-2 border border-slate-100 dark:border-slate-800">
+                  <div class="space-y-1">
+                    <NuxtLink to="/php/sobre" @click="isPhpMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="vscode-icons:file-type-php" class="w-5 h-5" /> Sobre o PHP</NuxtLink>
+                    <NuxtLink to="/php/html" @click="isPhpMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="vscode-icons:file-type-html" class="w-5 h-5" /> HTML</NuxtLink>
+                    <NuxtLink to="/php/css" @click="isPhpMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="vscode-icons:file-type-css" class="w-5 h-5" /> CSS</NuxtLink>
+                    <NuxtLink to="/php/js" @click="isPhpMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="vscode-icons:file-type-js-official" class="w-5 h-5" /> JavaScript</NuxtLink>
+                    <NuxtLink to="/php/sql-server" @click="isPhpMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="vscode-icons:file-type-sql" class="w-5 h-5" /> SQL Server</NuxtLink>
+                  </div>
+                </div>
+              </transition>
+            </div>
+
+            <!-- Nuxt Dropdown -->
+            <div class="relative" ref="nuxtMenuRef">
+              <button 
+                @click="isNuxtMenuOpen = !isNuxtMenuOpen"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all duration-300"
+              >
+                <Icon name="vscode-icons:file-type-nuxt" class="w-5 h-5" />
+                <span class="font-bold">Nuxt 4</span>
+                <Icon name="heroicons:chevron-down" class="w-4 h-4 ml-1 opacity-50 transition-transform" :class="isNuxtMenuOpen ? 'rotate-180' : ''" />
+              </button>
+              
+              <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <div v-if="isNuxtMenuOpen" class="absolute left-0 mt-2 w-56 origin-top-left rounded-xl bg-white dark:bg-slate-900 shadow-lg ring-1 ring-slate-200 dark:ring-white/10 focus:outline-none z-50 p-2 border border-slate-100 dark:border-slate-800">
+                  <div class="space-y-1">
+                    <NuxtLink to="/nuxt/sobre" @click="isNuxtMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="heroicons:sparkles" class="w-5 h-5" /> Sobre Nuxt 4</NuxtLink>
+                    <NuxtLink to="/playground" @click="isNuxtMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="heroicons:code-bracket" class="w-5 h-5" /> Playground</NuxtLink>
+                    <NuxtLink to="/examples" @click="isNuxtMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="heroicons:rocket-launch" class="w-5 h-5" /> Exemplos</NuxtLink>
+                    <div class="border-t border-slate-200 dark:border-slate-700 my-1"></div>
+                    <NuxtLink to="/nuxt/typescript" @click="isNuxtMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="vscode-icons:file-type-typescript-official" class="w-5 h-5" /> TypeScript</NuxtLink>
+                    <NuxtLink to="/nuxt/tailwind" @click="isNuxtMenuOpen = false" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"><Icon name="vscode-icons:file-type-tailwind" class="w-5 h-5" /> Tailwind</NuxtLink>
+                  </div>
+                </div>
+              </transition>
+            </div>
+
+            <!-- Jogos -->
             <NuxtLink 
-              to="/docs" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
+              to="/jogos" 
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all duration-300"
+              active-class="bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"
             >
-              <Icon name="heroicons:book-open" class="w-5 h-5" />
-              <span>Documentação</span>
-            </NuxtLink>
-            <NuxtLink 
-              to="/typescript" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
-            >
-              <Icon name="heroicons:code-bracket-square" class="w-5 h-5" />
-              <span>TypeScript</span>
-            </NuxtLink>
-            <NuxtLink 
-              to="/tailwind" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
-            >
-              <Icon name="simple-icons:tailwindcss" class="w-5 h-5" />
-              <span>Tailwind</span>
-            </NuxtLink>
-            <NuxtLink 
-              to="/playground" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
-            >
-              <Icon name="heroicons:code-bracket" class="w-5 h-5" />
-              <span>Playground</span>
-            </NuxtLink>
-            <NuxtLink 
-              to="/examples" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
-            >
-              <Icon name="heroicons:rocket-launch" class="w-5 h-5" />
-              <span>Exemplos</span>
-            </NuxtLink>
-            <NuxtLink 
-              to="/quiz" 
-              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-purple-500/10 dark:hover:text-purple-300 transition-all duration-300"
-              active-class="bg-sky-100 text-sky-700 dark:bg-purple-500/20 dark:text-purple-300"
-            >
-              <Icon name="heroicons:academic-cap" class="w-5 h-5" />
-              <span>Quiz</span>
+              <Icon name="heroicons:puzzle-piece" class="w-5 h-5" />
+              <span>Jogos (Testes)</span>
             </NuxtLink>
 
             <NuxtLink 
@@ -161,52 +186,28 @@
             <span>Início</span>
           </NuxtLink>
           <NuxtLink 
-            to="/docs" 
+            to="/php/sobre" 
             @click="closeMenu"
             class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
           >
-            <Icon name="heroicons:book-open" class="w-5 h-5" />
-            <span>Documentação</span>
+            <Icon name="vscode-icons:file-type-php" class="w-5 h-5" />
+            <span>Sobre PHP</span>
           </NuxtLink>
           <NuxtLink 
-            to="/typescript" 
+            to="/nuxt/sobre" 
             @click="closeMenu"
             class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
           >
-            <Icon name="heroicons:code-bracket-square" class="w-5 h-5" />
-            <span>TypeScript</span>
+            <Icon name="vscode-icons:file-type-nuxt" class="w-5 h-5" />
+            <span>Sobre Nuxt 4</span>
           </NuxtLink>
           <NuxtLink 
-            to="/tailwind" 
+            to="/jogos" 
             @click="closeMenu"
             class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
           >
-            <Icon name="simple-icons:tailwindcss" class="w-5 h-5" />
-            <span>Tailwind</span>
-          </NuxtLink>
-          <NuxtLink 
-            to="/playground" 
-            @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
-          >
-            <Icon name="heroicons:code-bracket" class="w-5 h-5" />
-            <span>Playground</span>
-          </NuxtLink>
-          <NuxtLink 
-            to="/examples" 
-            @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
-          >
-            <Icon name="heroicons:rocket-launch" class="w-5 h-5" />
-            <span>Exemplos</span>
-          </NuxtLink>
-          <NuxtLink 
-            to="/quiz" 
-            @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
-          >
-            <Icon name="heroicons:academic-cap" class="w-5 h-5" />
-            <span>Quiz</span>
+            <Icon name="heroicons:puzzle-piece" class="w-5 h-5" />
+            <span>Jogos (Testes)</span>
           </NuxtLink>
 
           <NuxtLink 
@@ -257,7 +258,7 @@
     <!-- Footer -->
     <footer class="bg-slate-50 dark:bg-[#020420] border-t border-black/5 dark:border-white/5 mt-auto">
       <div class="container mx-auto px-4 py-12">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-8">
           <NuxtLink to="/" class="flex items-center gap-3 group">
             <img 
               :src="colorMode.value === 'dark' ? '/logo-dark.png' : '/logo-light.png'" 
@@ -265,11 +266,6 @@
               class="h-12 w-auto"
             />
           </NuxtLink>
-          <div class="flex gap-8 text-slate-500 dark:text-gray-400 text-sm font-medium">
-            <NuxtLink to="/docs" class="hover:text-[#00DC82] transition-colors">Documentação</NuxtLink>
-            <NuxtLink to="/playground" class="hover:text-[#00DC82] transition-colors">Playground</NuxtLink>
-            <NuxtLink to="/quiz" class="hover:text-[#00DC82] transition-colors">Quiz</NuxtLink>
-          </div>
         </div>
         <div class="pt-8 border-t border-black/5 dark:border-white/5 text-center space-y-4">
           <p class="text-sm text-slate-500 dark:text-gray-500">
@@ -293,6 +289,14 @@ const colorMode = useColorMode()
 const isMenuOpen = ref(false)
 const isLoading = ref(true)
 const showLoading = ref(true)
+
+const phpMenuRef = ref(null)
+const isPhpMenuOpen = ref(false)
+onClickOutside(phpMenuRef, () => isPhpMenuOpen.value = false)
+
+const nuxtMenuRef = ref(null)
+const isNuxtMenuOpen = ref(false)
+onClickOutside(nuxtMenuRef, () => isNuxtMenuOpen.value = false)
 
 onMounted(() => {
   // Simulate heavy content loading or wait for hydration
