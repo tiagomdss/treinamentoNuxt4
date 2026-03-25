@@ -86,32 +86,48 @@
               </div>
             </button>
 
-            <!-- Hacker Game Card (Coming Soon) -->
-            <div 
-              class="group relative bg-slate-900/40 border border-slate-800 p-10 rounded-[2.5rem] shadow-2xl transition-all duration-500 opacity-60 grayscale cursor-not-allowed overflow-hidden"
-            >
-              <div class="absolute top-6 right-6 z-20">
-                <span class="px-4 py-1.5 bg-emerald-500 text-black font-bold text-[10px] uppercase tracking-[0.2em] rounded-full shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                  Em Breve
-                </span>
-              </div>
-              <div class="absolute top-0 right-0 p-8 opacity-10">
-                <Icon name="heroicons:computer-desktop" class="w-24 h-24 text-emerald-500" />
-              </div>
-              <div class="relative z-10">
-                <div class="w-16 h-16 bg-emerald-500/5 rounded-2xl flex items-center justify-center border border-emerald-500/10 mb-8">
-                  <Icon name="heroicons:terminal" class="w-8 h-8 text-emerald-500/40" />
+            <!-- Hacker Game Card -->
+            <div class="relative">
+              <!-- Pulsing Cyan Glow -->
+              <div class="absolute -inset-2 bg-cyan-500/20 blur-[40px] rounded-[3rem] animate-pulse pointer-events-none"></div>
+              
+              <button 
+                @click="mode = 'hacker'"
+                class="w-full h-full relative z-10 group bg-slate-900/80 border border-cyan-500/30 p-10 rounded-[2.5rem] shadow-[0_0_30px_rgba(0,255,255,0.05)] hover:shadow-[0_0_50px_rgba(0,255,255,0.15)] transition-all duration-500 hover:-translate-y-2 text-left overflow-hidden ring-1 ring-cyan-500/10 hover:ring-cyan-500/50"
+              >
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div class="absolute top-6 right-6 z-20">
+                  <span class="px-4 py-1.5 bg-cyan-500 text-black font-bold text-[10px] uppercase tracking-[0.2em] rounded-full shadow-[0_0_15px_rgba(0,255,255,0.4)] animate-pulse">
+                    BETA TEST
+                  </span>
                 </div>
-                <h2 class="text-3xl font-bold text-white/40 mb-4 font-mono tracking-wider italic">MODO_HACKER</h2>
-                <p class="text-slate-500 font-light mb-8 font-mono text-sm leading-relaxed">Prepare sua interface neural. O desafio de segurança definitivo está em desenvolvimento.</p>
-                <div class="flex items-center gap-2 text-emerald-500/20 font-bold font-mono uppercase tracking-widest text-xs">
-                  Aguardando Sincronização...
-                  <Icon name="heroicons:lock-closed" class="w-4 h-4" />
+                <div class="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity duration-500 group-hover:scale-110">
+                  <Icon name="mdi:incognito" class="w-24 h-24 text-cyan-500" />
                 </div>
-              </div>
+                <div class="relative z-10">
+                  <div class="w-16 h-16 bg-cyan-500/20 rounded-2xl flex items-center justify-center border border-cyan-500/40 mb-8 group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(0,255,255,0.1)]">
+                    <Icon name="mdi:incognito" class="w-8 h-8 text-cyan-400 group-hover:text-cyan-300" />
+                  </div>
+                  <h2 class="text-3xl font-bold text-white mb-4 font-mono tracking-wider italic group-hover:text-cyan-400 transition-colors drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">MODO_HACKER</h2>
+                  <p class="text-cyan-100/70 font-light mb-8 font-mono text-sm leading-relaxed">
+                    Infiltre-se no sistema central. Teste seus conhecimentos práticos e recupere os fragmentos de código perdidos.
+                  </p>
+                  <div class="flex items-center gap-2 text-cyan-400 font-bold font-mono uppercase tracking-widest text-xs">
+                    Iniciar Sequência
+                    <Icon name="heroicons:arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </button>
             </div>
           </div>
         </div>
+
+        <!-- Hacker Mode Core -->
+        <div v-else-if="mode === 'hacker'" class="animate-fade-in">
+          <HackerTerminal @exit="mode = null" />
+        </div>
+
 
         <!-- Simulator Core (Mission Viewer from NTL) -->
         <div v-else-if="mode === 'simulator'" class="animate-fade-in">
@@ -394,8 +410,15 @@ function resolveNavigation(confirmed: boolean) {
   }
 }
 
+const isSessionActive = computed(() => {
+  if (mode.value === 'hacker') return true
+  if (quizStarted.value && !quizFinished.value) return true
+  return false
+})
+
 function confirmExit() {
   quizStarted.value = false // Skip guard
+  if (mode.value === 'hacker') mode.value = null
   showExitModal.value = false
   resolveNavigation(true)
   if (!pendingNavigation) { // if the user just clicked abandon directly
@@ -505,7 +528,7 @@ onUnmounted(() => {
 })
 
 const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-  if (quizStarted.value && !quizFinished.value) {
+  if (isSessionActive.value) {
     e.preventDefault()
     e.returnValue = ''
   }
@@ -516,7 +539,7 @@ onMounted(() => {
 })
 
 onBeforeRouteLeave(async (to, from, next) => {
-  if (quizStarted.value && !quizFinished.value) {
+  if (isSessionActive.value) {
     showExitModal.value = true
     const confirmed = await new Promise<boolean>((resolve) => {
       pendingNavigation = resolve

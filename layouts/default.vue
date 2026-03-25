@@ -185,22 +185,45 @@
             <Icon name="heroicons:home" class="w-5 h-5" />
             <span>Início</span>
           </NuxtLink>
-          <NuxtLink 
-            to="/php/sobre" 
-            @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
-          >
-            <Icon name="vscode-icons:file-type-php" class="w-5 h-5" />
-            <span>Sobre PHP</span>
-          </NuxtLink>
-          <NuxtLink 
-            to="/nuxt/sobre" 
-            @click="closeMenu"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
-          >
-            <Icon name="vscode-icons:file-type-nuxt" class="w-5 h-5" />
-            <span>Sobre Nuxt 4</span>
-          </NuxtLink>
+          <div class="space-y-1">
+            <button 
+              @click="isPhpMenuOpen = !isPhpMenuOpen"
+              class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
+            >
+              <div class="flex items-center gap-2">
+                <Icon name="vscode-icons:file-type-php" class="w-5 h-5" />
+                <span class="font-bold">PHP</span>
+              </div>
+              <Icon name="heroicons:chevron-down" class="w-4 h-4 transition-transform" :class="isPhpMenuOpen ? 'rotate-180' : ''" />
+            </button>
+            <div v-show="isPhpMenuOpen" class="pl-11 pr-4 py-2 space-y-1 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+              <NuxtLink to="/php/sobre" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">Sobre o PHP</NuxtLink>
+              <NuxtLink to="/php/html" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">HTML</NuxtLink>
+              <NuxtLink to="/php/css" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">CSS</NuxtLink>
+              <NuxtLink to="/php/js" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">JavaScript</NuxtLink>
+              <NuxtLink to="/php/sql-server" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">SQL Server</NuxtLink>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <button 
+              @click="isNuxtMenuOpen = !isNuxtMenuOpen"
+              class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-slate-700 dark:text-white hover:bg-sky-50 dark:hover:bg-purple-500/10 transition-all font-medium"
+            >
+              <div class="flex items-center gap-2">
+                <Icon name="vscode-icons:file-type-nuxt" class="w-5 h-5" />
+                <span class="font-bold">Nuxt 4</span>
+              </div>
+              <Icon name="heroicons:chevron-down" class="w-4 h-4 transition-transform" :class="isNuxtMenuOpen ? 'rotate-180' : ''" />
+            </button>
+            <div v-show="isNuxtMenuOpen" class="pl-11 pr-4 py-2 space-y-1 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+              <NuxtLink to="/nuxt/sobre" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">Sobre Nuxt 4</NuxtLink>
+              <NuxtLink to="/playground" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">Playground</NuxtLink>
+              <NuxtLink to="/examples" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">Exemplos</NuxtLink>
+              <NuxtLink to="/nuxt/typescript" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">TypeScript</NuxtLink>
+              <NuxtLink to="/nuxt/tailwind" @click="closeMenu" class="block py-2 text-sm text-slate-600 dark:text-slate-400">Tailwind</NuxtLink>
+            </div>
+          </div>
           <NuxtLink 
             to="/jogos" 
             @click="closeMenu"
