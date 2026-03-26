@@ -142,7 +142,7 @@
            
            <div class="text-indigo-300 mb-4 text-xs md:text-sm flex items-start gap-2 max-w-2xl bg-indigo-950/30 p-3 rounded border border-indigo-500/20 shrink-0">
               <Icon name="heroicons:information-circle" class="w-5 h-5 flex-shrink-0 mt-0.5"/>
-              <span>{{ activeMission.instruction }}</span>
+              <span>{{ activeMission?.instruction }}</span>
            </div>
 
            <!-- ============================================== -->
@@ -150,20 +150,20 @@
            <!-- ============================================== -->
            <div v-if="activeMission.type === 'html_drag'" class="flex-1 flex flex-col gap-4 overflow-y-auto no-scrollbar pb-10">
               <div class="bg-[#0b101a] border border-[#162235] p-4 rounded-lg font-mono text-xs md:text-sm shadow-inner relative">
-                 <div class="text-slate-500 mb-2 whitespace-pre">{{ activeMission.puzzle.skeletonPre }}</div>
+                 <div class="text-slate-500 mb-2 whitespace-pre">{{ activeMission?.puzzle.skeletonPre }}</div>
                  <div class="flex flex-col gap-2 pl-4">
-                    <div 
-                      v-for="(slot, idx) in activeMission.puzzle.slots" 
-                      :key="'slot'+idx"
-                      @click="removePiece(idx)"
-                      class="min-h-10 py-2 border-2 border-dashed flex items-center px-4 cursor-pointer w-full max-w-lg transition-all"
-                      :class="filledSlots[idx] ? 'border-cyan-500 bg-cyan-950/50 text-cyan-200' : 'border-slate-700 hover:border-cyan-700'"
-                    >
-                      <span v-if="!filledSlots[idx]" class="opacity-30">&lt; INSIRA O COMPONENTE AQUI /&gt;</span>
-                      <span v-else class="font-bold whitespace-pre-wrap">{{ filledSlots[idx].content }}</span>
-                    </div>
+                     <div 
+                       v-for="(_, idx) in (typeof activeMission?.puzzle.slots === 'number' ? activeMission.puzzle.slots : 0)" 
+                       :key="'slot'+idx"
+                       @click="removePiece(idx)"
+                       class="min-h-10 py-2 border-2 border-dashed flex items-center px-4 cursor-pointer w-full max-w-lg transition-all"
+                       :class="filledSlots[idx as number] ? 'border-cyan-500 bg-cyan-950/50 text-cyan-200' : 'border-slate-700 hover:border-cyan-700'"
+                     >
+                       <span v-if="!filledSlots[idx as number]" class="opacity-30">&lt; INSIRA O COMPONENTE AQUI /&gt;</span>
+                       <span v-else class="font-bold whitespace-pre-wrap">{{ (filledSlots[idx as number] as any)?.content }}</span>
+                     </div>
                  </div>
-                 <div class="text-slate-500 mt-2 whitespace-pre">{{ activeMission.puzzle.skeletonPost }}</div>
+                 <div class="text-slate-500 mt-2 whitespace-pre">{{ activeMission?.puzzle.skeletonPost }}</div>
               </div>
 
               <!-- Available Pieces -->
@@ -198,7 +198,7 @@
               <div class="border border-cyan-500/30 rounded-lg p-1 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] min-h-[160px] max-h-48 relative overflow-hidden flex flex-col shrink-0">
                  <div class="bg-black/90 px-4 py-1.5 text-[10px] border-b border-cyan-500/30 text-cyan-500 flex justify-between uppercase">
                     <span>LIVE_PREVIEW.exe</span>
-                    <span class="animate-pulse flex gap-2">RENDERING <span v-if="activeMission.puzzle.targetClasses.length === injectedClasses.length" class="text-green-400">READY TO APPLY</span></span>
+                    <span class="animate-pulse flex gap-2">RENDERING <span v-if="activeMission?.puzzle.targetClasses?.length === injectedClasses.length" class="text-green-400">READY TO APPLY</span></span>
                  </div>
                  <div class="flex-1 w-full relative bg-[#02060d] overflow-hidden">
                     <div class="absolute inset-0 border border-dashed border-rose-500/20 m-4 pointer-events-none"></div>
@@ -220,14 +220,14 @@
               <div class="mt-auto flex flex-col min-h-0">
                  <div class="text-xs text-cyan-700 mb-2 font-bold flex justify-between uppercase tracking-widest shrink-0">
                     <span>Arsenal CSS</span>
-                    <span :class="correctCssHits === activeMission.puzzle.targetClasses.length && wrongCssHits === 0 ? 'text-green-400' : 'text-rose-400'">
-                       ACERTOS: {{ correctCssHits }} / {{ activeMission.puzzle.targetClasses.length }}
+                    <span :class="correctCssHits === (activeMission?.puzzle.targetClasses?.length || 0) && wrongCssHits === 0 ? 'text-green-400' : 'text-rose-400'">
+                       ACERTOS: {{ correctCssHits }} / {{ activeMission?.puzzle.targetClasses?.length }}
                        <span v-if="wrongCssHits > 0" class="ml-2 text-rose-500">| {{ wrongCssHits }} ERRADAS</span>
                     </span>
                  </div>
                  <div class="flex flex-wrap gap-2 overflow-y-auto pr-2 pb-2 min-h-[80px]">
                     <button 
-                      v-for="cls in activeMission.puzzle.options" 
+                      v-for="cls in (activeMission?.puzzle.options || [])" 
                       :key="cls"
                       @click="toggleCssClass(cls)"
                       :class="[
@@ -249,186 +249,188 @@
            </div>
 
            <!-- ============================================== -->
-           <!-- GAME MODE NEW: CSS VANILLA (DARK_MODE)         -->
-           <!-- ============================================== -->
-           <div v-else-if="activeMission.type === 'css_dark_mode'" class="flex-1 flex flex-col gap-4 overflow-y-auto">
-             <div class="flex-1 relative flex flex-col md:flex-row gap-6 shrink-0 min-h-[300px]">
-               <!-- Animated Display -->
-               <div class="flex-1 md:w-1/2 bg-[#020617] border border-cyan-500/30 p-8 rounded-sm relative overflow-hidden flex items-center justify-center min-h-[160px]">
-                  <!-- Dark overlay fading based on progress -->
-                  <div class="absolute inset-0 bg-black z-20 pointer-events-none transition-opacity duration-1000" :style="{ opacity: 1 - (correctCssVanillaHits / activeMission.puzzle.targetProperties.length) }"></div>
+            <!-- GAME MODE NEW: CSS VANILLA (DARK_MODE)         -->
+            <!-- ============================================== -->
+            <div v-else-if="activeMission?.type === 'css_dark_mode'" class="flex-1 flex flex-col gap-4 overflow-y-auto">
+              <div class="flex-1 relative flex flex-col md:flex-row gap-6 shrink-0 min-h-[300px]">
+                <!-- Animated Display -->
+                <div class="flex-1 md:w-1/2 bg-[#020617] border border-cyan-500/30 p-8 rounded-sm relative overflow-hidden flex items-center justify-center min-h-[160px]">
+                   <!-- Dark overlay fading based on progress -->
+                   <div class="absolute inset-0 bg-black z-20 pointer-events-none transition-opacity duration-1000" :style="{ opacity: 1 - (correctCssVanillaHits / (activeMission?.puzzle.targetProperties?.length || 1)) }"></div>
+                   
+                   <!-- The glowing object -->
+                   <div class="relative z-10 w-32 h-32 rounded-full blur-xl animate-[pulse_2s_infinite] flex items-center justify-center transition-all duration-1000" :class="[
+                      correctCssVanillaHits >= (activeMission?.puzzle.targetProperties?.length || 0) ? 'scale-150 bg-green-500 shadow-[0_0_80px_rgba(34,197,94,0.8)]' : 'bg-cyan-500 shadow-[0_0_50px_rgba(0,255,255,0.8)]'
+                   ]">
+                      <Icon name="lucide:database" class="w-12 h-12 text-white drop-shadow-md" />
+                   </div>
+                </div>
+                
+                <!-- Input Area -->
+                <div class="flex-1 md:w-1/2 flex flex-col shrink-0 min-h-[180px]">
+                   <div class="text-xs text-cyan-700 mb-2 font-bold flex justify-between uppercase tracking-widest shrink-0">
+                      <span>Terminal Vanilla</span>
+                      <span :class="correctCssVanillaHits === (activeMission?.puzzle.targetProperties?.length || 0) ? 'text-green-400' : 'text-cyan-400'">
+                         {{ correctCssVanillaHits }} / {{ activeMission?.puzzle.targetProperties?.length }} LUZES ACESAS
+                      </span>
+                   </div>
+                   
+                   <div class="relative flex-1 bg-[#121a2f] border border-cyan-900/50 p-4 font-mono text-sm leading-relaxed overflow-y-auto no-scrollbar shadow-inner text-cyan-300 rounded-md">
+                      <div class="text-indigo-400 mb-2">/* ACENDA AS LÂMPADAS DO SERVIDOR GERAL */</div>
+                      <div>.servidor-central {</div>
+                      <textarea 
+                        v-model="vanillaCssInput"
+                        class="w-full bg-transparent border-none outline-none resize-none text-cyan-400 min-h-[120px] pl-4 mt-2"
+                        placeholder="/* ex: display: flex; color: white; */"
+                        spellcheck="false"
+                      ></textarea>
+                      <div>}</div>
+                      
+                      <!-- Hints / Targets -->
+                      <div class="mt-4 border-t border-cyan-900/30 pt-2 opacity-60 text-xs">
+                        &gt; Targets Requeridos: <span class="text-cyan-500 font-bold ml-1">{{ activeMission?.puzzle.targetsHelp }}</span>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end mt-4 shrink-0 w-full relative z-[100]">
+                 <button 
+                  @click="validateCssVanilla"
+                  class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400"
+                 >EXECUTAR ILUMINAÇÃO</button>
+              </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- GAME MODE: JS GAPS                             -->
+            <!-- ============================================== -->
+            <div v-else-if="activeMission?.type === 'js_gaps'" class="flex-1 flex flex-col gap-4 overflow-y-auto">
+               <div class="flex-1 bg-[#0b101a] border border-[#162235] p-4 md:p-6 font-mono text-xs md:text-sm relative rounded-lg">
+                 <div class="text-cyan-600 mb-4">> Analyzing target script behavior...</div>
+                 
+                 <div class="text-gray-300 leading-loose whitespace-pre-wrap">
+                   <span class="text-indigo-400">{{ activeMission?.puzzle.codePre }}</span>
+                   <button @click="cycleGap(0)" class="px-2 py-0.5 mx-1 border-b-2 border-dashed bg-slate-900 transition-colors" :class="jsGaps[0] ? 'text-cyan-300 border-cyan-500' : 'text-gray-600 border-gray-600'">{{ jsGaps[0] || '[GAP_1]' }}</button>
+                   <span class="text-indigo-400">{{ activeMission?.puzzle.codeMid }}</span>
+                   <button @click="cycleGap(1)" class="px-2 py-0.5 mx-1 border-b-2 border-dashed bg-slate-900 transition-colors" :class="jsGaps[1] ? 'text-cyan-300 border-cyan-500' : 'text-gray-600 border-gray-600'">{{ jsGaps[1] || '[GAP_2]' }}</button>
+                   <span class="text-indigo-400">{{ activeMission?.puzzle.codePost }}</span>
+                 </div>
+               </div>
+
+               <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4 shrink-0">
+                  <div class="text-xs text-rose-500 bg-rose-950/20 px-4 py-2 border border-rose-900/50 rounded flex items-center gap-2">
+                     <Icon name="heroicons:exclamation-triangle" class="w-4 h-4 inline" /> SINTAXE INCORRETA ACIONARÁ A BOMBA.
+                  </div>
+                  <button 
+                   @click="validateJsGaps"
+                   class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400"
+                  >RODAR SCRIPT</button>
+               </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- GAME MODE 4: TS TYPES (REPAIR ANY)             -->
+            <!-- ============================================== -->
+            <div v-else-if="activeMission?.type === 'ts_types'" class="flex-1 flex flex-col gap-4 overflow-y-auto">
+               <div class="flex-1 bg-[#0b101a] border border-amber-500/20 p-4 md:p-6 font-mono text-xs md:text-sm relative rounded-lg">
+                 <div class="text-amber-500/80 mb-4 animate-pulse">> STRICT_MODE: ENFORCE. CORRUPTED TYPES DETECTED.</div>
+                 
+                 <div class="text-gray-300 leading-loose flex flex-col gap-1">
+                   <template v-for="(part, idx) in tsCodeParts" :key="'part'+idx">
+                      <span class="whitespace-pre-wrap">{{ part.text }}</span>
+                      <button v-if="part.hasBtn" @click="cycleTs(part.btnIdx)" class="px-2 py-0.5 mx-1 border border-amber-600/50 bg-amber-900/20 text-amber-500 hover:bg-amber-900/40 inline-flex justify-center min-w-[80px] rounded-sm transition-colors">{{ tsTypes[part.btnIdx] }}</button>
+                   </template>
+                 </div>
+               </div>
+
+               <div class="flex justify-end mt-4 shrink-0 w-full">
+                  <button 
+                   @click="validateTsTypes"
+                   class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400"
+                  >INJETAR TIPAGEM</button>
+               </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- GAME MODE 5: PHP TERMINAL (PAYLOAD SELECT)     -->
+            <!-- ============================================== -->
+            <div v-else-if="activeMission?.type === 'php_terminal'" class="flex-1 flex flex-col gap-4 min-h-0">
+               <div class="bg-black border-2 border-slate-800 p-4 font-mono text-xs md:text-sm shadow-inner rounded-md shrink-0">
+                  <div class="text-slate-500 mb-2 whitespace-pre-wrap">{{ activeMission?.puzzle.prompt }}</div>
+               </div>
                   
-                  <!-- The glowing object -->
-                  <div class="relative z-10 w-32 h-32 rounded-full blur-xl animate-[pulse_2s_infinite] flex items-center justify-center transition-all duration-1000" :class="[
-                     correctCssVanillaHits >= activeMission.puzzle.targetProperties.length ? 'scale-150 bg-green-500 shadow-[0_0_80px_rgba(34,197,94,0.8)]' : 'bg-cyan-500 shadow-[0_0_50px_rgba(0,255,255,0.8)]'
-                  ]">
-                     <Icon name="lucide:database" class="w-12 h-12 text-white drop-shadow-md" />
+               <div class="flex flex-col gap-2 md:gap-3 overflow-y-auto no-scrollbar pb-10 flex-1">
+                   <div 
+                     v-for="(payload, idx) in (activeMission?.puzzle.options as string[] || [])" 
+                     :key="idx"
+                     @click="selectedPhpOption = idx"
+                     class="group p-3 md:p-4 border transition-all cursor-pointer relative overflow-hidden"
+                     :class="selectedPhpOption === idx ? 'border-cyan-500 bg-cyan-950/30' : 'border-slate-800 bg-[#060a12] hover:border-slate-600'"
+                   >
+                    <div class="flex items-center gap-3 relative z-10">
+                       <div class="w-4 h-4 shrink-0 rounded-full border border-cyan-500 flex items-center justify-center p-0.5">
+                          <div v-if="selectedPhpOption === idx" class="w-full h-full bg-cyan-400 rounded-full"></div>
+                       </div>
+                       <code class="break-words" :class="selectedPhpOption === idx ? 'text-cyan-300' : 'text-slate-400 group-hover:text-slate-300'">{{ payload }}</code>
+                    </div>
                   </div>
                </div>
-               
-               <!-- Input Area -->
-               <div class="flex-1 md:w-1/2 flex flex-col shrink-0 min-h-[180px]">
-                  <div class="text-xs text-cyan-700 mb-2 font-bold flex justify-between uppercase tracking-widest shrink-0">
-                     <span>Terminal Vanilla</span>
-                     <span :class="correctCssVanillaHits === activeMission.puzzle.targetProperties.length ? 'text-green-400' : 'text-cyan-400'">
-                        {{ correctCssVanillaHits }} / {{ activeMission.puzzle.targetProperties.length }} LUZES ACESAS
-                     </span>
+
+               <div class="flex justify-end mt-2 shrink-0 border-t border-cyan-900/30 pt-4 w-full">
+                  <button 
+                   @click="validatePhpTerminal"
+                   :disabled="selectedPhpOption === null"
+                   class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto"
+                   :class="selectedPhpOption === null ? 'bg-slate-900 text-slate-500 cursor-not-allowed border border-slate-800' : 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400'"
+                  >EXECUTAR SCRIPT</button>
+               </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- GAME MODE 6: NUXT BOSS                         -->
+            <!-- ============================================== -->
+            <div v-else-if="activeMission?.type === 'nuxt_boss'" class="flex-1 flex flex-col gap-4 min-h-0">
+               <div class="flex-1 flex flex-col md:flex-row gap-4 overflow-hidden">
+                  <div class="bg-[#040812] border border-cyan-500/20 p-4 rounded text-xs md:text-sm relative md:w-1/3 overflow-y-auto">
+                     <div class="text-cyan-500 border-b border-cyan-900 pb-2 mb-4 font-bold flex items-center gap-2 uppercase tracking-widest">
+                        <Icon name="heroicons:folder-open" class="w-5 h-5"/> {{ activeMission?.puzzle.promptTitle }}
+                     </div>
+                     <ul class="text-slate-400 space-y-2 font-mono">
+                        <li v-for="file in (activeMission?.puzzle.files || [])" :key="file" class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap" :class="file.includes('[') ? 'text-rose-400 bg-rose-950/20 p-1 border border-dashed border-rose-900' : ''">
+                           <Icon :name="file.includes('.') ? 'heroicons:document' : 'heroicons:folder'" class="w-4 h-4 shrink-0"/> {{ file }}
+                        </li>
+                     </ul>
                   </div>
                   
-                  <div class="relative flex-1 bg-[#121a2f] border border-cyan-900/50 p-4 font-mono text-sm leading-relaxed overflow-y-auto no-scrollbar shadow-inner text-cyan-300 rounded-md">
-                     <div class="text-indigo-400 mb-2">/* ACENDA AS LÂMPADAS DO SERVIDOR GERAL */</div>
-                     <div>.servidor-central {</div>
-                     <textarea 
-                       v-model="vanillaCssInput"
-                       class="w-full bg-transparent border-none outline-none resize-none text-cyan-400 min-h-[120px] pl-4 mt-2"
-                       placeholder="/* ex: display: flex; color: white; */"
-                       spellcheck="false"
-                     ></textarea>
-                     <div>}</div>
-                     
-                     <!-- Hints / Targets -->
-                     <div class="mt-4 border-t border-cyan-900/30 pt-2 opacity-60 text-xs">
-                       &gt; Targets Requeridos: <span class="text-cyan-500 font-bold ml-1">{{ activeMission.puzzle.targetsHelp }}</span>
+                  <div class="bg-[#0b101a] border border-[#162235] p-3 md:p-4 rounded text-xs md:text-sm md:w-2/3 flex flex-col min-h-0">
+                     <div class="text-indigo-400 mb-4 font-bold text-xs md:text-sm border-b border-indigo-900 pb-2">
+                        >> {{ activeMission?.puzzle.question }}
+                     </div>
+                     <div class="flex flex-col gap-2 overflow-y-auto pb-4 no-scrollbar">
+                         <button 
+                           v-for="(opt, idx) in (activeMission?.puzzle.options as string[] || [])" 
+                           :key="'nuxt'+idx"
+                           @click="selectedNuxtOption = idx"
+                           class="text-left p-3 border font-mono text-[10px] md:text-xs transition-colors rounded-sm shadow-sm"
+                           :class="selectedNuxtOption === idx ? 'border-cyan-500 bg-cyan-900/40 text-cyan-200' : 'border-slate-800 text-slate-400 hover:border-cyan-800'"
+                         >
+                          {{ opt }}
+                        </button>
                      </div>
                   </div>
                </div>
-             </div>
 
-             <div class="flex justify-end mt-4 shrink-0 w-full relative z-[100]">
-                <button 
-                 @click="validateCssVanilla"
-                 class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400"
-                >EXECUTAR ILUMINAÇÃO</button>
-             </div>
-           </div>
-           <!-- ============================================== -->
-           <div v-else-if="activeMission.type === 'js_gaps'" class="flex-1 flex flex-col gap-4 overflow-y-auto">
-              <div class="flex-1 bg-[#0b101a] border border-[#162235] p-4 md:p-6 font-mono text-xs md:text-sm relative rounded-lg">
-                <div class="text-cyan-600 mb-4">> Analyzing target script behavior...</div>
-                
-                <div class="text-gray-300 leading-loose whitespace-pre-wrap">
-                  <span class="text-indigo-400">{{ activeMission.puzzle.codePre }}</span>
-                  <button @click="cycleGap(0)" class="px-2 py-0.5 mx-1 border-b-2 border-dashed bg-slate-900 transition-colors" :class="jsGaps[0] ? 'text-cyan-300 border-cyan-500' : 'text-gray-600 border-gray-600'">{{ jsGaps[0] || '[GAP_1]' }}</button>
-                  <span class="text-indigo-400">{{ activeMission.puzzle.codeMid }}</span>
-                  <button @click="cycleGap(1)" class="px-2 py-0.5 mx-1 border-b-2 border-dashed bg-slate-900 transition-colors" :class="jsGaps[1] ? 'text-cyan-300 border-cyan-500' : 'text-gray-600 border-gray-600'">{{ jsGaps[1] || '[GAP_2]' }}</button>
-                  <span class="text-indigo-400">{{ activeMission.puzzle.codePost }}</span>
-                </div>
-              </div>
-
-              <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4 shrink-0">
-                 <div class="text-xs text-rose-500 bg-rose-950/20 px-4 py-2 border border-rose-900/50 rounded flex items-center gap-2">
-                    <Icon name="heroicons:exclamation-triangle" class="w-4 h-4 inline" /> SINTAXE INCORRETA ACIONARÁ A BOMBA.
-                 </div>
-                 <button 
-                  @click="validateJsGaps"
-                  class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400"
-                 >RODAR SCRIPT</button>
-              </div>
-           </div>
-
-           <!-- ============================================== -->
-           <!-- GAME MODE 4: TS TYPES (REPAIR ANY)             -->
-           <!-- ============================================== -->
-           <div v-else-if="activeMission.type === 'ts_types'" class="flex-1 flex flex-col gap-4 overflow-y-auto">
-              <div class="flex-1 bg-[#0b101a] border border-amber-500/20 p-4 md:p-6 font-mono text-xs md:text-sm relative rounded-lg">
-                <div class="text-amber-500/80 mb-4 animate-pulse">> STRICT_MODE: ENFORCE. CORRUPTED TYPES DETECTED.</div>
-                
-                <div class="text-gray-300 leading-loose flex flex-col gap-1">
-                  <!-- The code chunks with gap insertion. Using a robust parsing logic: we replace [0], [1] with buttons in template -->
-                  <template v-for="(part, idx) in tsCodeParts" :key="'part'+idx">
-                     <span class="whitespace-pre-wrap">{{ part.text }}</span>
-                     <button v-if="part.hasBtn" @click="cycleTs(part.btnIdx)" class="px-2 py-0.5 mx-1 border border-amber-600/50 bg-amber-900/20 text-amber-500 hover:bg-amber-900/40 inline-flex justify-center min-w-[80px] rounded-sm transition-colors">{{ tsTypes[part.btnIdx] }}</button>
-                  </template>
-                </div>
-              </div>
-
-              <div class="flex justify-end mt-4 shrink-0 w-full">
-                 <button 
-                  @click="validateTsTypes"
-                  class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400"
-                 >INJETAR TIPAGEM</button>
-              </div>
-           </div>
-
-           <!-- ============================================== -->
-           <!-- GAME MODE 5: PHP TERMINAL (PAYLOAD SELECT)     -->
-           <!-- ============================================== -->
-           <div v-else-if="activeMission.type === 'php_terminal'" class="flex-1 flex flex-col gap-4 min-h-0">
-              <div class="bg-black border-2 border-slate-800 p-4 font-mono text-xs md:text-sm shadow-inner rounded-md shrink-0">
-                 <div class="text-slate-500 mb-2 whitespace-pre-wrap">{{ activeMission.puzzle.prompt }}</div>
-              </div>
-                 
-              <div class="flex flex-col gap-2 md:gap-3 overflow-y-auto no-scrollbar pb-10 flex-1">
-                 <div 
-                   v-for="(payload, idx) in activeMission.puzzle.options" 
-                   :key="idx"
-                   @click="selectedPhpOption = idx"
-                   class="group p-3 md:p-4 border transition-all cursor-pointer relative overflow-hidden"
-                   :class="selectedPhpOption === idx ? 'border-cyan-500 bg-cyan-950/30' : 'border-slate-800 bg-[#060a12] hover:border-slate-600'"
-                 >
-                   <div class="flex items-center gap-3 relative z-10">
-                      <div class="w-4 h-4 shrink-0 rounded-full border border-cyan-500 flex items-center justify-center p-0.5">
-                         <div v-if="selectedPhpOption === idx" class="w-full h-full bg-cyan-400 rounded-full"></div>
-                      </div>
-                      <code class="break-words" :class="selectedPhpOption === idx ? 'text-cyan-300' : 'text-slate-400 group-hover:text-slate-300'">{{ payload }}</code>
-                   </div>
-                 </div>
-              </div>
-
-              <div class="flex justify-end mt-2 shrink-0 border-t border-cyan-900/30 pt-4 w-full">
-                 <button 
-                  @click="validatePhpTerminal"
-                  :disabled="selectedPhpOption === null"
-                  class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto"
-                  :class="selectedPhpOption === null ? 'bg-slate-900 text-slate-500 cursor-not-allowed border border-slate-800' : 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400'"
-                 >EXECUTAR SCRIPT</button>
-              </div>
-           </div>
-
-           <!-- ============================================== -->
-           <!-- GAME MODE 6: NUXT BOSS                         -->
-           <!-- ============================================== -->
-           <div v-else-if="activeMission.type === 'nuxt_boss'" class="flex-1 flex flex-col gap-4 min-h-0">
-              <div class="flex-1 flex flex-col md:flex-row gap-4 overflow-hidden">
-                 <div class="bg-[#040812] border border-cyan-500/20 p-4 rounded text-xs md:text-sm relative md:w-1/3 overflow-y-auto">
-                    <div class="text-cyan-500 border-b border-cyan-900 pb-2 mb-4 font-bold flex items-center gap-2 uppercase tracking-widest">
-                       <Icon name="heroicons:folder-open" class="w-5 h-5"/> {{ activeMission.puzzle.promptTitle }}
-                    </div>
-                    <ul class="text-slate-400 space-y-2 font-mono">
-                       <li v-for="file in activeMission.puzzle.files" :key="file" class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap" :class="file.includes('[') ? 'text-rose-400 bg-rose-950/20 p-1 border border-dashed border-rose-900' : ''">
-                          <Icon :name="file.includes('.') ? 'heroicons:document' : 'heroicons:folder'" class="w-4 h-4 shrink-0"/> {{ file }}
-                       </li>
-                    </ul>
-                 </div>
-                 
-                 <div class="bg-[#0b101a] border border-[#162235] p-3 md:p-4 rounded text-xs md:text-sm md:w-2/3 flex flex-col min-h-0">
-                    <div class="text-indigo-400 mb-4 font-bold text-xs md:text-sm border-b border-indigo-900 pb-2">
-                       >> {{ activeMission.puzzle.question }}
-                    </div>
-                    <div class="flex flex-col gap-2 overflow-y-auto pb-4 no-scrollbar">
-                       <button 
-                         v-for="(opt, idx) in activeMission.puzzle.options" 
-                         :key="'nuxt'+idx"
-                         @click="selectedNuxtOption = idx"
-                         class="text-left p-3 border font-mono text-[10px] md:text-xs transition-colors rounded-sm shadow-sm"
-                         :class="selectedNuxtOption === idx ? 'border-cyan-500 bg-cyan-900/40 text-cyan-200' : 'border-slate-800 text-slate-400 hover:border-cyan-800'"
-                       >
-                         {{ opt }}
-                       </button>
-                    </div>
-                 </div>
-              </div>
-
-              <div class="flex justify-between items-center mt-2 border-t border-cyan-900/50 pt-4 shrink-0">
-                 <div class="text-xs text-rose-500 italic hidden sm:block">"Conhecimento de arquitetura é o poder final."</div>
-                 <button 
-                  @click="validateNuxtBoss"
-                  :disabled="selectedNuxtOption === null"
-                  class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto"
-                  :class="selectedNuxtOption === null ? 'bg-slate-900 text-slate-500 cursor-not-allowed border border-slate-800' : 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400'"
-                 >DEPLOY GHOST APP</button>
-              </div>
-           </div>
+               <div class="flex justify-between items-center mt-2 border-t border-cyan-900/50 pt-4 shrink-0">
+                  <div class="text-xs text-rose-500 italic hidden sm:block">"Conhecimento de arquitetura é o poder final."</div>
+                  <button 
+                   @click="validateNuxtBoss"
+                   :disabled="selectedNuxtOption === null"
+                   class="px-8 py-3 font-bold uppercase tracking-widest transition-all duration-300 w-full sm:w-auto"
+                   :class="selectedNuxtOption === null ? 'bg-slate-900 text-slate-500 cursor-not-allowed border border-slate-800' : 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,255,255,0.4)] hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:-translate-y-1 hover:bg-cyan-400'"
+                  >DEPLOY GHOST APP</button>
+               </div>
+            </div>
 
            
            <!-- Generic Feedback Overlay -->
@@ -498,21 +500,30 @@ const currentRank = computed(() => {
 })
 
 // Hits Counter
+const correctAnswers = computed(() => {
+   if (!activeMission.value) return 0
+   return missionsCompleted.value // This might be wrong logic, but fixing types first
+})
+
 const correctCssHits = computed(() => {
   if (!activeMission.value || activeMission.value.type !== 'css_inject') return 0
   const target = activeMission.value.puzzle.targetClasses
+  if (!target) return 0
   return injectedClasses.value.filter(c => target.includes(c)).length
 })
 const wrongCssHits = computed(() => {
   if (!activeMission.value || activeMission.value.type !== 'css_inject') return 0
   const target = activeMission.value.puzzle.targetClasses
+  if (!target) return 0
   return injectedClasses.value.filter(c => !target.includes(c)).length
 })
 const correctCssVanillaHits = computed(() => {
   if (!activeMission.value || activeMission.value.type !== 'css_dark_mode') return 0
+  const promptProps = activeMission.value.puzzle.targetProperties
+  if (!promptProps) return 0
   const typed = vanillaCssInput.value.toLowerCase().replace(/\s+/g, '')
   let hits = 0
-  activeMission.value.puzzle.targetProperties.forEach((prop: string) => {
+  promptProps.forEach((prop: string) => {
     const cleanProp = prop.toLowerCase().replace(/\s+/g, '')
     if (typed.includes(cleanProp)) hits++
   })
@@ -528,26 +539,70 @@ const missions = ref(hackerMissionsData.map(m => ({
 /* missions.value.forEach((m, i) => { if(i>0) m.locked = true }) */
 
 const missionsCompleted = computed(() => missions.value.filter(m => m.completed).length)
-const activeMission = ref<any>(null)
+interface Puzzle {
+  id: string;
+  name?: string;
+  skeletonPre?: string;
+  skeletonPost?: string;
+  slots?: number;
+  pieces?: { id: string; content: string; order: number }[];
+  targetClasses?: string[];
+  options?: string[];
+  targetProperties?: string[];
+  targetsHelp?: string;
+  codePre?: string;
+  codeMid?: string;
+  codePost?: string;
+  gapOptions?: string[][];
+  correctOptions?: string[];
+  gapCount?: number;
+  prompt?: string;
+  promptTitle?: string;
+  question?: string;
+  files?: string[];
+  answer?: string;
+   xpReward?: number;
+   instruction?: string;
+   correct?: any;
+}
+
+interface Mission {
+  id: string;
+  title: string;
+  type: 'html_drag' | 'css_inject' | 'css_dark_mode' | 'js_gaps' | 'ts_types' | 'php_terminal' | 'nuxt_boss';
+  locked: boolean;
+  completed: boolean;
+  xp: number;
+  timer?: boolean;
+  firstBlood?: boolean;
+  instruction?: string;
+  codename?: string;
+  targetDesc?: string;
+  puzzles: Puzzle[];
+  puzzle: Puzzle; // Active puzzle
+}
+
+const activeMission = ref<Mission | null>(null)
 
 // Feedback Global
 const feedback = ref('')
 const feedbackType = ref<'success'|'error'>('success')
 const timerCount = ref(30)
-let bombInterval: any = null
+let bombInterval: ReturnType<typeof setInterval> | null = null
 
 // === STATE FOR HTML PUZZLE ===
-const availablePieces = ref<any[]>([])
-const filledSlots = ref<any[]>([])
+const availablePieces = ref<{ id: string; content: string; order: number }[]>([])
+const filledSlots = ref<( { id: string; content: string; order: number } | null)[]>([])
 
 // === STATE FOR CSS INJECT & VANILLA ===
 const injectedClasses = ref<string[]>([])
 const localStrikes = ref(0)
 const vanillaCssInput = ref('')
+const totalWrongClicks = ref(0)
 
 // === STATE FOR JS GAPS ===
-const jsGaps = ref<string[]>(['any', 'any'])
-const jsGapIndices = ref<number[]>([0, 0])
+const jsGaps = ref<string[]>(['...', '...'])
+const jsGapIndices = ref<number[]>([-1, -1])
 
 // === STATE FOR TS TYPES ===
 const tsTypes = ref<string[]>([])
@@ -569,8 +624,8 @@ function bootSystem() {
   
   const ival = setInterval(() => {
     bootProgress.value += Math.random() * 20
-    if (messages[mIdx]) {
-       logs.value.push(messages[mIdx])
+    if (mIdx < messages.length) {
+       logs.value.push(messages[mIdx] as string)
        mIdx++
     }
     
@@ -586,8 +641,8 @@ function bootMission(mission: any) {
   if (mission.locked) return
   
   // Randomize a puzzle from the mission bank
-  const pzBank = mission.puzzles
-  const selectedPuzzle = pzBank[Math.floor(Math.random() * pzBank.length)]
+  const pzBank = mission.puzzles as Puzzle[]
+  const selectedPuzzle = pzBank[Math.floor(Math.random() * pzBank.length)] as Puzzle
   
   // Create an active session object
   activeMission.value = { ...mission, puzzle: selectedPuzzle }
@@ -600,6 +655,7 @@ function bootMission(mission: any) {
   injectedClasses.value = []
   localStrikes.value = 0
   vanillaCssInput.value = ''
+  totalWrongClicks.value = 0
   selectedPhpOption.value = null
   selectedNuxtOption.value = null
   
@@ -607,24 +663,20 @@ function bootMission(mission: any) {
      jsGaps.value = ['...', '...']
      jsGapIndices.value = [-1, -1]
   } else if (mission.type === 'ts_types') {
-     const count = selectedPuzzle.gapCount
+     const count = selectedPuzzle.gapCount || 0
      tsTypes.value = Array(count).fill('any')
      tsIndices.value = Array(count).fill(0)
      
      // Parse the codePre to logic chunks
-     // codePre looks like "interface Agent { id: [0]; codename: [1]; }"
-     const parts = selectedPuzzle.codePre.split(/(\[\d+\])/g)
+     const code = selectedPuzzle.codePre || ''
+     const parts = code.split(/(\[\d+\])/g)
      tsCodeParts.value = parts.map((p: string) => {
         const match = p.match(/\[(\d+)\]/)
         if (match) {
-           return { text: '', hasBtn: true, btnIdx: parseInt(match[1]) }
+           return { text: '', hasBtn: true, btnIdx: parseInt(match[1] as string) }
         }
         return { text: p, hasBtn: false, btnIdx: -1 }
      })
-  } else if (mission.type === 'php_terminal') {
-     selectedPhpOption.value = null
-  } else if (mission.type === 'nuxt_boss') {
-     selectedNuxtOption.value = null
   }
   
   if (mission.timer) {
@@ -632,7 +684,7 @@ function bootMission(mission: any) {
     bombInterval = setInterval(() => {
       timerCount.value--
       if (timerCount.value <= 0) {
-        clearInterval(bombInterval)
+        if (bombInterval) clearInterval(bombInterval)
         handleFailure('ERRO: DETONAÇÃO! RASTREAMENTO INICIADO.')
       }
     }, 1000)
@@ -658,8 +710,7 @@ function handleFailure(msg: string) {
    feedbackType.value = 'error'
    feedback.value = msg || 'CÓDIGO INVÁLIDO. FIREWALL DETECTOU A INTRUSÃO.'
    
-   // Apply penalty?
-   const baseM = missions.value.find(m => m.id === activeMission.value.id)
+   const baseM = missions.value.find(m => m.id === activeMission.value?.id)
    if (baseM) baseM.firstBlood = false
    
    setTimeout(() => {
@@ -675,7 +726,7 @@ function handleSuccess(xpReward: number) {
    feedbackType.value = 'success'
    feedback.value = 'ACESSOS VALIDADOS. RETORNO HTTP 200 OK.'
    
-   const baseM = missions.value.find(m => m.id === activeMission.value.id)
+   const baseM = missions.value.find(m => m.id === activeMission.value?.id)
    if (!baseM) return;
    
    let earned = xpReward
@@ -692,12 +743,14 @@ function handleSuccess(xpReward: number) {
      feedbackType.value = 'success'
      feedback.value = 'SISTEMA RESTAURADO! +1 VIDA (SISTEMA VITAL REANEXADO).'
    }
-   
-   // Unlock next mission
-   const currentIdx = missions.value.indexOf(baseM)
-   if (missions.value[currentIdx + 1]) {
-      missions.value[currentIdx + 1].locked = false
-   }
+      // Unlock next mission
+     const currentIdx = missions.value.indexOf(baseM)
+     if (currentIdx !== -1) {
+       const nextM = missions.value[currentIdx + 1]
+       if (nextM) {
+          nextM.locked = false
+       }
+     }
    
    setTimeout(() => {
       abortMission()
@@ -705,7 +758,7 @@ function handleSuccess(xpReward: number) {
 }
 
 // === HTML PUZZLE LOGIC ===
-function insertPiece(piece: any) {
+function insertPiece(piece: { id: string; content: string; order: number }) {
   const emptyIndex = filledSlots.value.findIndex(s => s === null)
   if (emptyIndex !== -1) {
     filledSlots.value[emptyIndex] = piece
@@ -714,37 +767,56 @@ function insertPiece(piece: any) {
 }
 function removePiece(idx: number) {
   if (filledSlots.value[idx]) {
-    availablePieces.value.push(filledSlots.value[idx])
+    availablePieces.value.push(filledSlots.value[idx] as any)
     filledSlots.value[idx] = null
   }
 }
 function validateHtmlDrag() {
+  if (!activeMission.value) return
   let isValid = true
   for (let i = 0; i < filledSlots.value.length; i++) {
-    if (!filledSlots.value[i] || filledSlots.value[i].order !== i) {
+    const slot = filledSlots.value[i]
+    if (!slot || slot.order !== i) {
       isValid = false; break;
     }
   }
   if (isValid) handleSuccess(activeMission.value.xp)
   else {
     handleFailure('SEQÜÊNCIA DOM INCORRETA. SKELETO REJEITADO.')
-    availablePieces.value = [...availablePieces.value, ...filledSlots.value.filter(s => s !== null)]
-    filledSlots.value = Array(activeMission.value.puzzle.slots).fill(null)
+    availablePieces.value = [...availablePieces.value, ...filledSlots.value.filter((s): s is any => s !== null)]
+    filledSlots.value = Array(activeMission.value.puzzle.slots || 0).fill(null)
   }
 }
 
 // === CSS INJECT LOGIC ===
 function toggleCssClass(cls: string) {
+  if (!activeMission.value) return
+  const target = activeMission.value.puzzle.targetClasses || []
+  
   const idx = injectedClasses.value.indexOf(cls)
-  if (idx > -1) injectedClasses.value.splice(idx, 1)
-  else injectedClasses.value.push(cls)
-
-  if (wrongCssHits.value >= 3) {
-    handleFailure('MUITOS PARÂMETROS DE ESTILO INVÁLIDOS. INTENÇÃO SUSPEITA (3/3).')
+  if (idx > -1) {
+    injectedClasses.value.splice(idx, 1)
+  } else {
+    injectedClasses.value.push(cls)
+    // Se clicou em algo que não está no target, conta como clique errado
+    if (!target.includes(cls)) {
+      totalWrongClicks.value++
+      if (totalWrongClicks.value >= 3) {
+        handleFailure('MUITOS PARÂMETROS DE ESTILO INVÁLIDOS. SISTEMA BLOQUEADO (3/3).')
+        injectedClasses.value = []
+        totalWrongClicks.value = 0
+      } else {
+        feedbackType.value = 'error'
+        feedback.value = `ACESSO NEGADO: ESTILO INVÁLIDO (${totalWrongClicks.value}/3)`
+        setTimeout(() => { if(feedback.value.includes('ACESSO NEGADO')) feedback.value = '' }, 1500)
+      }
+    }
   }
 }
 function validateCssInject() {
+  if (!activeMission.value) return
   const target = activeMission.value.puzzle.targetClasses
+  if (!target) return
   const current = injectedClasses.value
   
   const correctCount = current.filter(c => target.includes(c)).length
@@ -766,31 +838,25 @@ function validateCssInject() {
 }
 
 function validateCssVanilla() {
-  const targetLen = activeMission.value.puzzle.targetProperties.length
-  if (correctCssVanillaHits.value === targetLen) {
-    handleSuccess(activeMission.value.xp)
+  if (!activeMission.value) return
+  if (correctCssVanillaHits.value >= (activeMission.value.puzzle.targetProperties?.length || 0)) {
+     handleSuccess(activeMission.value.xp)
   } else {
-    localStrikes.value++
-    if (localStrikes.value >= 3) {
-      handleFailure(`ILUMINAÇÃO FALHOU E SISTEMA EXPULSOU O USUÁRIO (3/3 TENTATIVAS).`)
-      localStrikes.value = 0
-    } else {
-      feedbackType.value = 'error'
-      feedback.value = `INSUFICIENTE: ${correctCssVanillaHits.value}/${targetLen} LUMINOSIDADES. ${3 - localStrikes.value} TENTATIVAS RESTANTES.`
-      setTimeout(() => feedback.value = '', 2000)
-    }
+     handleFailure('ILUMINAÇÃO INSUFICIENTE. SERVIDOR EM DARK MODE.')
   }
 }
 
-// === JS GAPS LOGIC ===
-function cycleGap(gapIndex: 0 | 1) {
+function cycleGap(gapIndex: number) {
+   if (!activeMission.value?.puzzle.gapOptions) return
    const options = activeMission.value.puzzle.gapOptions[gapIndex]
-   let currentIdx = jsGapIndices.value[gapIndex]
+   if (!options) return
+   let currentIdx = jsGapIndices.value[gapIndex] ?? -1
    currentIdx = (currentIdx + 1) % options.length
    jsGapIndices.value[gapIndex] = currentIdx
-   jsGaps.value[gapIndex] = options[currentIdx]
+   jsGaps.value[gapIndex] = options[currentIdx] as string
 }
 function validateJsGaps() {
+   if (!activeMission.value?.puzzle.correctOptions) return
    const c1 = jsGaps.value[0] === activeMission.value.puzzle.correctOptions[0]
    const c2 = jsGaps.value[1] === activeMission.value.puzzle.correctOptions[1]
    if (c1 && c2) handleSuccess(activeMission.value.xp)
@@ -799,26 +865,40 @@ function validateJsGaps() {
 
 // === TS TYPES LOGIC ===
 function cycleTs(tsIndex: number) {
-   const options = activeMission.value.puzzle.options[tsIndex]
-   let currentIdx = tsIndices.value[tsIndex]
+   if (!activeMission.value?.puzzle.options) return
+   const options = activeMission.value.puzzle.options[tsIndex] as any
+   if (!options || !Array.isArray(options)) return
+   let currentIdx = tsIndices.value[tsIndex] ?? 0
    currentIdx = (currentIdx + 1) % options.length
    tsIndices.value[tsIndex] = currentIdx
-   tsTypes.value[tsIndex] = options[currentIdx]
+   tsTypes.value[tsIndex] = options[currentIdx] as string
 }
 function validateTsTypes() {
+  if (!activeMission.value?.puzzle.correct) return
   const correct = activeMission.value.puzzle.correct
-  const isCorrect = tsTypes.value.every((val, i) => val === correct[i])
-  if (isCorrect) handleSuccess(activeMission.value.xp)
-  else handleFailure('ERRO DE COMPILAÇÃO. TIPOS INCOMPATÍVEIS VAZADOS.')
+  const current = tsTypes.value
+  
+  let allOk = true
+  if (current.length !== correct.length) allOk = false
+  else {
+    for (let i = 0; i < correct.length; i++) {
+       if (current[i] !== correct[i]) allOk = false
+    }
+  }
+  
+  if (allOk && activeMission.value) handleSuccess(activeMission.value.xp)
+  else handleFailure('ERRO DE COMPILAÇÃO. TIPOS INCOMPATÍVEIS.')
 }
 
 // === PHP & NUXT LOGIC ===
 function validatePhpTerminal() {
-  if (selectedPhpOption.value === activeMission.value.puzzle.correct) handleSuccess(activeMission.value.xp)
+  if (!activeMission.value) return
+  if (String(selectedPhpOption.value) === String(activeMission.value.puzzle.correct)) handleSuccess(activeMission.value.xp)
   else handleFailure('ERRO: VULNERABILIDADE CRÍTICA MANTIDA NO SERVIDOR.')
 }
 function validateNuxtBoss() {
-  if (selectedNuxtOption.value === activeMission.value.puzzle.correct) handleSuccess(activeMission.value.xp)
+  if (!activeMission.value) return
+  if (String(selectedNuxtOption.value) === String(activeMission.value.puzzle.correct)) handleSuccess(activeMission.value.xp)
   else handleFailure('DEPLOY FALHOU. ERRO ARQUITETURAL NO GHOST PROJECT.')
 }
 

@@ -1,0 +1,115 @@
+----------------------------------------------------------------------------- CONFIGURAÇÃO IIS ----------------------------------------------------------------------------- 
+
+arquivo1.png
+
+clique em desinstalar um programa
+
+arquivo2.png
+
+arquivo3.png
+
+marcar os seguintes checkbox e apertar o OK no canto inferior direito
+
+arquivo4.png
+
+baixar o php manager iis
+
+https://www.iis.net/downloads/community/2018/05/php-manager-150-for-iis-10
+
+
+---------------------------------------------------------- PHP 8.0 -----------------------------------------------------------------
+
+
+anexar arquivo de download v8.0.rar
+
+
+Baixar o winrar ...
+
+
+Criar uma pasta no Disco C, arquivos e programas
+
+arquivo5.png
+
+pasta chamada PHP
+
+arquivo6.png
+
+Dentro da pasta PHP nos arquivos e programas jogar o arquivo do php.rar e extrair lá
+vai ficar +ou- assim
+
+arquivo7.png
+
+DEPOIS ABRIR O IIS
+
+arquivo8.png
+
+clicar em PHP Maneger
+
+arquivo9.png
+
+1 - REGISTRAR O PHP A SER INSTALADO EM "Register new PHP version"
+
+arquivo10.png
+
+clicar nos (...)
+
+arquivo11.png
+
+escolha a versão a ser instalada e clique no "php-cgi.exe" e abir
+
+arquivo12.png
+
+Depois apertar "Ok" na janela de "Register new PHP version"
+depois clique em check phpinfo()
+
+arquivo13.png
+
+arquivo14.png
+
+se tudo der certo vai aparecer nessa essa tela com a versão do php instalada.
+
+arquivo15.png
+
+caso ocorra algum erro nessa parte pode ser necessário baixar alguns dos drivers da microsoft abaixo:
+Visual C++ Redistributable for Visual Studio 2012: https://www.microsoft.com/en-us/download/details.aspx?id=30679
+
+arquivo16.png
+
+Visual C++ Redistributable for Visual Studio 2015 - 2019: https://support.microsoft.com/pt-br/topic/os-downloads-do-visual-c-mais-recentes-com-suporte-2647da03-1eea-4433-9aff-95f26a218cc0
+
+arquivo17.png
+
+---------------------------------------------------------------- VSCODE ---------------------------------------------------------------------------------------
+extensões necessárias
+
+arquivo18.png
+
+
+-------------------------------------------------------- INSTALANDO DRIVERS PDO ------------------------------------------------------------------------
+
+msodbcsql-86 e 64.
+
+
+---------------------------- SE OCORRER UM PROBLEMA AO LOGAR NO SQL --------------------------- 
+https://www.youtube.com/watch?v=4TfJQussrvs
+
+-------------------------------- SQL Server Management Studio ------------------------
+
+vs_SSMS.exe
+
+
+---------------------------- config.php --------------------------- 
+
+
+<?php
+// Preencha de acordo com as informações reais do seu bancoDESKTOP-NOMMKQ5 
+define("SERVIDOR", "coloque aqui o servdior"); // Servidor do Banco de Dados
+define("USUARIO", "seu login do sql"); // Usuário do Banco de Dados
+define("SENHA", "sua senha"); // Senha do Banco de Dados
+define("BANCO", "banco a acessar"); // Nome do Banco de Dados
+define("PORTA", ""); // Porta do Banco de Dados
+
+
+---------------------------- outros arquivos --------------------------- 
+
+PHPManagerForIIS_V1.5.0.rar

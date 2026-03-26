@@ -23,6 +23,24 @@
           <p class="text-xl text-slate-700 dark:text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
             Sua jornada para dominar o framework Vue.js mais intuitivo e poderoso do ecossistema.. 🚀
           </p>
+
+          <!-- Video Section -->
+          <div class="mt-12 flex justify-center">
+            <div class="relative w-full max-w-3xl aspect-video rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
+               <div class="absolute inset-0 bg-emerald-500/10 group-hover:bg-transparent transition-colors duration-700 pointer-events-none z-10"></div>
+              <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/LqdHD6EJ7XM?si=AvmNcxPKFQy3hUQl" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" 
+                allowfullscreen
+                class="relative z-0"
+              ></iframe>
+            </div>
+          </div>
         </div>
           <!-- Tabs -->
           <div class="flex items-center justify-center gap-4 flex-wrap mb-16 px-4">
@@ -82,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
 const activeTab = ref('getting-started')
 
 const tabs = [

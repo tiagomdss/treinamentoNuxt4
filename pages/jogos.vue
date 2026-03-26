@@ -364,8 +364,20 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import { gameQuestions, nuxtQuestions } from '~/data/training'
 useSeoMeta({ title: 'Jogos e Hub de Simulação | Treinamento Neeo' })
+
+interface Question {
+  id: string;
+  category: string;
+  prompt: string;
+  context: string;
+  options: string[];
+  answer: string;
+  explanation: string;
+}
 
 const mode = ref<'simulator' | 'quiz-nuxt' | 'quiz-php' | 'hacker' | null>(null)
 
@@ -376,22 +388,22 @@ const currentQuestion = ref(0)
 const selectedAnswer = ref<number | null>(null)
 const answers = ref<(number | null)[]>([])
 const timeRemaining = ref(600) // 10 minutes
-const timerInterval = ref<any>(null)
+const timerInterval = ref<ReturnType<typeof setInterval> | null>(null)
 const localAnsweredStatus = ref(false)
 
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array]
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!]
   }
   return shuffled
 }
 
 // Select active question bank based on mode and shuffle 10 questions
-const activeQuestions = computed(() => {
-  if (mode.value === 'quiz-nuxt') return shuffleArray(nuxtQuestions).slice(0, 10)
-  if (mode.value === 'quiz-php') return shuffleArray(gameQuestions).slice(0, 10)
+const activeQuestions = computed<Question[]>(() => {
+  if (mode.value === 'quiz-nuxt') return shuffleArray(nuxtQuestions).slice(0, 10) as Question[]
+  if (mode.value === 'quiz-php') return shuffleArray(gameQuestions).slice(0, 10) as Question[]
   return []
 })
 
@@ -438,9 +450,8 @@ function cancelExit() {
 
 const correctAnswers = computed(() => {
   return answers.value.filter((answer, index) => {
-    // Determine the original correct index based on the answer text inside our data models.
     const q = activeQuestions.value[index]
-    if (!q) return false
+    if (!q || answer === null) return false
     const expectedIndex = q.options.indexOf(q.answer)
     return answer === expectedIndex
   }).length

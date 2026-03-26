@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { folderZones } from '~/data/training'
 
 const environmentChecklist = [
@@ -24,6 +25,81 @@ const tabs = [
 ]
 
 const zoomedImage = ref<string | null>(null)
+
+interface TutorialContent {
+  text: string;
+  image?: string;
+  link?: string;
+  linkText?: string;
+  components?: { name: string; link: string }[];
+}
+
+interface TutorialStep {
+  title: string;
+  icon: string;
+  content?: TutorialContent[];
+  code?: string;
+}
+
+const openTutorialStep = ref<number | null>(null)
+const tutorialSteps: TutorialStep[] = [
+  {
+    title: '1. Configuração do IIS',
+    icon: 'lucide:settings-2',
+    content: [
+      { text: 'Abra o Painel de Controle e clique em "Desinstalar um programa".', image: 'arquivo1.png' },
+      { text: 'Clique em "Ativar ou desativar recursos do Windows".', image: 'arquivo2.png' },
+      { text: 'Marque as seguintes checkboxes e aperte OK no canto inferior direito:', image: 'arquivo3.png' },
+      { text: 'Aguarde a instalação e finalize.', image: 'arquivo4.png' },
+      { text: 'Baixe e instale o PHP Manager for IIS 1.5.0.', link: '/img/php_tutorial/PHPManagerForIIS_V1.5.0.rar', linkText: 'Download PHP Manager (RAR)', image: 'arquivo15.png' }
+    ]
+  },
+  {
+    title: '2. Instalação do PHP 8.0',
+    icon: 'vscode-icons:file-type-php',
+    content: [
+      { text: 'Baixe o PHP 8.0 e crie uma pasta no Disco C chamada "arquivos e programas".', link: '/img/php_tutorial/v8.0.rar', linkText: 'Download PHP 8.0 (RAR)', image: 'arquivo5.png' },
+      { text: 'Crie uma subpasta chamada "PHP".', image: 'arquivo6.png' },
+      { text: 'Extraia o conteúdo do PHP 8.0 dentro desta pasta.', image: 'arquivo7.png' },
+      { text: 'Abra o IIS (Internet Information Services) e clique em "PHP Manager".', image: 'arquivo8.png' },
+      { text: 'Clique em "Register new PHP version".', image: 'arquivo10.png' },
+      { text: 'Navegue até a pasta do PHP e selecione o arquivo "php-cgi.exe".', image: 'arquivo11.png' },
+      { text: 'Confirme em OK e verifique a instalação clicando em "Check phpinfo()".', image: 'arquivo13.png' }
+    ]
+  },
+  {
+    title: '3. Drivers e Troubleshooting',
+    icon: 'lucide:alert-circle',
+    content: [
+      { text: 'Caso ocorra erro no phpinfo, instale os drivers Visual C++ necessários.' },
+      { text: 'Visual C++ 2012 Redistributable.', link: 'https://www.microsoft.com/en-us/download/details.aspx?id=30679', linkText: 'Download VC 2012', image: 'arquivo16.png' },
+      { text: 'Visual C++ 2015-2019 Redistributable.', link: 'https://support.microsoft.com/pt-br/topic/os-downloads-do-visual-c-mais-recentes-com-suporte-2647da03-1eea-4433-9aff-95f26a218cc0', linkText: 'Download VC 2015-2019', image: 'arquivo17.png' },
+      { text: 'Instale os drivers Microsoft ODBC para SQL Server.', components: [
+        { name: 'ODBC x64', link: '/img/php_tutorial/msodbcsql-64.msi' },
+        { name: 'ODBC x86', link: '/img/php_tutorial/msodbcsql-86.msi' }
+      ]}
+    ]
+  },
+  {
+    title: '4. VSCode & SQL Management',
+    icon: 'vscode-icons:file-type-vscode',
+    content: [
+      { text: 'Instale as extensões recomendadas para PHP no VSCode.', image: 'arquivo18.png' },
+      { text: 'Instale o SQL Server Management Studio (SSMS) para gerenciar o banco.', link: '/img/php_tutorial/vs_SSMS.exe', linkText: 'Download SSMS Tool' }
+    ]
+  },
+  {
+    title: '5. Configuração do config.php',
+    icon: 'lucide:code-2',
+    code: `<?php
+// Preencha de acordo com as informações reais do seu banco
+define("SERVIDOR", "coloque aqui o servidor"); // Servidor do Banco de Dados
+define("USUARIO", "seu login do sql");        // Usuário do Banco de Dados
+define("SENHA", "sua senha");               // Senha do Banco de Dados
+define("BANCO", "banco a acessar");         // Nome do Banco de Dados
+define("PORTA", "");                       // Opcional`
+  }
+]
 </script>
 
 <template>
@@ -36,6 +112,24 @@ const zoomedImage = ref<string | null>(null)
       <p class="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
         Todo o conteúdo extraído do Padrão Oficial 2024 e do atlas do projeto para você dominar a base antes de codar.
       </p>
+
+      <!-- Video Section -->
+      <div class="mt-12 flex justify-center">
+        <div class="relative w-full max-w-3xl aspect-video rounded-3xl overflow-hidden shadow-2xl border border-indigo-500/20 group">
+          <div class="absolute inset-0 bg-indigo-500/5 group-hover:bg-transparent transition-colors duration-700 pointer-events-none z-10"></div>
+          <iframe 
+            width="100%" 
+            height="100%" 
+            src="https://www.youtube.com/embed/g6JR2BUaG_Y?si=4dJcc_GYbZ1XAPby" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen
+            class="relative z-0"
+          ></iframe>
+        </div>
+      </div>
     </div>
 
     <!-- Mapeamento Geográfico & Checklist (Moved from index) -->
@@ -88,6 +182,85 @@ const zoomedImage = ref<string | null>(null)
             <Icon name="lucide:download-cloud" class="w-7 h-7 animate-bounce relative z-10" />
             <span class="relative z-10">Baixar PDF Completo</span>
           </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beginner Tutorial Dropdown (Accordion) -->
+    <div class="mb-20">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="h-10 w-2 bg-indigo-500 rounded-full"></div>
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Tutorial de Iniciantes</h2>
+      </div>
+      
+      <div class="space-y-4">
+        <div v-for="(step, sIdx) in tutorialSteps" :key="sIdx" class="group border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-slate-900/50 hover:border-indigo-500/30 transition-all duration-300">
+          <button 
+            @click="openTutorialStep = openTutorialStep === sIdx ? null : sIdx"
+            class="w-full p-6 flex items-center justify-between text-left"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                <Icon :name="step.icon" class="w-5 h-5" />
+              </div>
+              <span class="text-lg font-bold text-slate-800 dark:text-slate-200">{{ step.title }}</span>
+            </div>
+            <Icon 
+              name="lucide:chevron-down" 
+              class="w-5 h-5 transition-transform duration-300"
+              :class="openTutorialStep === sIdx ? 'rotate-180 text-indigo-500' : 'text-slate-400'"
+            />
+          </button>
+          
+          <transition 
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="transform opacity-0 -translate-y-4"
+            enter-to-class="transform opacity-100 translate-y-0"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="transform opacity-100 translate-y-0"
+            leave-to-class="transform opacity-0 -translate-y-4"
+          >
+            <div v-show="openTutorialStep === sIdx" class="p-6 border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-black/20">
+              <div v-if="step.content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div v-for="(item, iIdx) in step.content" :key="iIdx" class="flex flex-col gap-3">
+                  <div class="flex items-start gap-3">
+                    <span class="w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">{{ iIdx + 1 }}</span>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{{ item.text }}</p>
+                  </div>
+                  
+                  <div v-if="item.image" class="relative group/img cursor-zoom-in" @click="zoomedImage = `/img/php_tutorial/${item.image}`">
+                    <img :src="`/img/php_tutorial/${item.image}`" class="rounded-xl border border-slate-200 dark:border-white/10 shadow-sm w-full h-auto object-cover aspect-video hover:ring-2 hover:ring-indigo-500 transition-all" />
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 flex items-center justify-center transition-opacity rounded-xl">
+                      <Icon name="lucide:zoom-in" class="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+
+                  <div v-if="item.link" class="flex flex-col gap-2">
+                    <a :href="item.link" target="_blank" class="inline-flex items-center gap-2 text-indigo-500 hover:text-indigo-600 font-bold text-xs uppercase tracking-wider group/link">
+                      <Icon name="lucide:external-link" class="w-4 h-4" />
+                      {{ item.linkText }}
+                    </a>
+                  </div>
+                  
+                  <div v-if="item.components" class="flex flex-wrap gap-2">
+                    <a v-for="comp in item.components" :key="comp.name" :href="comp.link" target="_blank" class="px-3 py-1.5 bg-indigo-500/10 hover:bg-indigo-500 hover:text-white rounded-lg text-[10px] font-bold transition-all border border-indigo-500/20">
+                      {{ comp.name }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="step.code" class="bg-[#0f172a] rounded-xl border border-slate-700/50 overflow-hidden shadow-xl mt-4">
+                <div class="flex items-center px-4 py-2 bg-slate-800/50 border-b border-slate-700/50 justify-between">
+                  <div class="flex gap-2"><div class="w-3 h-3 rounded-full bg-red-400/80"></div><div class="w-3 h-3 rounded-full bg-amber-400/80"></div><div class="w-3 h-3 rounded-full bg-green-400/80"></div></div>
+                  <span class="text-xs font-mono text-slate-400">config.php</span>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                  <pre class="text-sm font-mono leading-relaxed text-slate-300"><code>{{ step.code }}</code></pre>
+                </div>
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
     </div>
