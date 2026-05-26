@@ -219,6 +219,117 @@ $data = $res->fetch_assoc();
              </div>
           </div>
 
+          <!-- Tab: SQLServer > MySQL -->
+          <div v-if="activeTab === 'sqlmysql'" class="space-y-10">
+             <div class="bg-white/65 dark:bg-white/[0.02] border border-white dark:border-white/10 rounded-[3rem] p-12 backdrop-blur-xl shadow-glass relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 blur-[100px] -z-10"></div>
+                
+                <div class="max-w-6xl mx-auto space-y-12">
+                   <div class="text-center space-y-4 mb-12">
+                      <div class="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                         <Icon name="heroicons:arrow-right-circle" class="w-12 h-12 text-blue-500" />
+                      </div>
+                      <h2 class="text-4xl font-bold dark:text-white text-slate-900">Diferenças <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">SQL Server → MySQL</span></h2>
+                      <p class="text-slate-600 dark:text-slate-400 font-light max-w-3xl mx-auto">Um guia completo das principais diferenças sintáticas, tipos de dados e funcionalidades entre os dois bancos de dados mais populares do mercado.</p>
+                   </div>
+
+                   <!-- Tipos de Dados -->
+                   <div class="space-y-6">
+                      <h3 class="text-2xl font-bold dark:text-white text-slate-900 flex items-center gap-3">
+                        <Icon name="heroicons:table-cells" class="w-7 h-7 text-blue-500" />
+                        1. Tipos de Dados
+                      </h3>
+                      <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/10">
+                         <table class="w-full text-sm">
+                            <thead class="bg-slate-100 dark:bg-white/5">
+                               <tr>
+                                  <th class="px-6 py-4 text-left font-bold text-slate-700 dark:text-slate-300">Categoria</th>
+                                  <th class="px-6 py-4 text-left font-bold text-blue-600 dark:text-blue-400">SQL Server</th>
+                                  <th class="px-6 py-4 text-left font-bold text-emerald-600 dark:text-emerald-400">MySQL</th>
+                                  <th class="px-6 py-4 text-left font-bold text-slate-700 dark:text-slate-300">Notas</th>
+                               </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 dark:divide-white/5">
+                               <tr v-for="row in dataTypesComparison" :key="row.category" class="hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-colors">
+                                  <td class="px-6 py-4 font-semibold text-slate-800 dark:text-slate-200">{{ row.category }}</td>
+                                  <td class="px-6 py-4 font-mono text-xs text-blue-600 dark:text-blue-400">{{ row.sqlserver }}</td>
+                                  <td class="px-6 py-4 font-mono text-xs text-emerald-600 dark:text-emerald-400">{{ row.mysql }}</td>
+                                  <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400">{{ row.notes }}</td>
+                               </tr>
+                            </tbody>
+                         </table>
+                      </div>
+                   </div>
+
+                   <!-- Funções e Sintaxe -->
+                   <div class="space-y-6">
+                      <h3 class="text-2xl font-bold dark:text-white text-slate-900 flex items-center gap-3">
+                        <Icon name="heroicons:code-bracket" class="w-7 h-7 text-emerald-500" />
+                        2. Funções e Sintaxe
+                      </h3>
+                      <div class="grid md:grid-cols-2 gap-6">
+                         <div v-for="(func, idx) in functionsComparison" :key="idx" class="p-6 bg-slate-50 dark:bg-white/[0.02] rounded-2xl border border-slate-200 dark:border-white/5">
+                            <h4 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+                              <span class="w-6 h-6 rounded-lg bg-blue-500/10 flex items-center justify-center text-xs font-bold text-blue-500">{{ idx + 1 }}</span>
+                              {{ func.name }}
+                            </h4>
+                            <div class="space-y-3">
+                               <div>
+                                  <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">SQL Server:</span>
+                                  <code class="block mt-1 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-xs font-mono text-blue-700 dark:text-blue-300">{{ func.sqlserver }}</code>
+                               </div>
+                               <div>
+                                  <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">MySQL:</span>
+                                  <code class="block mt-1 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg text-xs font-mono text-emerald-700 dark:text-emerald-300">{{ func.mysql }}</code>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+
+                   <!-- Recursos e Limitações -->
+                   <div class="space-y-6">
+                      <h3 class="text-2xl font-bold dark:text-white text-slate-900 flex items-center gap-3">
+                        <Icon name="heroicons:light-bulb" class="w-7 h-7 text-yellow-500" />
+                        3. Recursos e Comportamentos
+                      </h3>
+                      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                         <div v-for="feature in featuresComparison" :key="feature.title" class="p-6 bg-gradient-to-br from-slate-50 to-white dark:from-white/[0.02] dark:to-white/[0.01] rounded-2xl border border-slate-200 dark:border-white/5 hover:border-blue-500/30 transition-all group">
+                            <div class="flex items-start gap-3 mb-3">
+                               <Icon :name="feature.icon" class="w-6 h-6 text-blue-500 mt-1" />
+                               <h4 class="font-bold text-slate-800 dark:text-white">{{ feature.title }}</h4>
+                            </div>
+                            <div class="space-y-2">
+                               <div class="flex items-start gap-2">
+                                  <span class="text-xs font-bold text-red-500 shrink-0">✗ MSSQL:</span>
+                                  <p class="text-xs text-slate-600 dark:text-slate-400">{{ feature.sqlserver }}</p>
+                               </div>
+                               <div class="flex items-start gap-2">
+                                  <span class="text-xs font-bold text-green-500 shrink-0">✓ MySQL:</span>
+                                  <p class="text-xs text-slate-600 dark:text-slate-400">{{ feature.mysql }}</p>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+
+                   <!-- Dicas de Migração -->
+                   <div class="p-8 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 border border-blue-500/20 rounded-3xl">
+                      <h4 class="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
+                        <Icon name="heroicons:clipboard-document-check" class="w-6 h-6 text-blue-500" />
+                        Checklist de Migração
+                      </h4>
+                      <div class="grid md:grid-cols-2 gap-4">
+                         <div v-for="tip in migrationTips" :key="tip" class="flex items-start gap-3 p-4 bg-white/50 dark:bg-white/[0.02] rounded-xl">
+                            <Icon name="heroicons:check-circle" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">{{ tip }}</span>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+
           <!-- Tab: Architecture (Nuxt 4 Ecosystem) -->
           <div v-if="activeTab === 'architecture'" class="space-y-12">
              <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -281,6 +392,7 @@ const tabs = [
   { id: 'logic', label: 'Lógica (TypeScript)', icon: 'heroicons:command-line' },
   { id: 'styling', label: 'Estilo (Tailwind UI)', icon: 'heroicons:pencil-square' },
   { id: 'database', label: 'Dados (Modern DB)', icon: 'heroicons:circle-stack' },
+  { id: 'sqlmysql', label: 'SQLServer > MySQL', icon: 'heroicons:arrow-right-circle' },
   { id: 'architecture', label: 'Arquitetura (Nuxt 4)', icon: 'heroicons:finger-print' }
 ]
 
@@ -324,6 +436,97 @@ const stepsDetailed = [
   { label: 'Nitro Backend', sub: 'API Endpoints' },
   { label: 'Vue Architecture', sub: 'Pages & Layouts' },
   { label: 'Atomic Styling', sub: 'Tailwind UI' }
+]
+
+// SQL Server > MySQL Comparison Data
+const dataTypesComparison = [
+  { category: 'String (tamanho fixo)', sqlserver: 'CHAR(n)', mysql: 'CHAR(n)', notes: 'Ambos armazenam exatamente n caracteres' },
+  { category: 'String (variável)', sqlserver: 'VARCHAR(n)', mysql: 'VARCHAR(n)', notes: 'MySQL 5.0.3+ suporta até 65,535 bytes' },
+  { category: 'String (grande)', sqlserver: 'VARCHAR(MAX)', mysql: 'TEXT / MEDIUMTEXT / LONGTEXT', notes: 'MySQL tem 3 níveis de texto' },
+  { category: 'Unicode', sqlserver: 'NVARCHAR(n)', mysql: 'VARCHAR(n) com utf8mb4', notes: 'SQL Server usa UTF-16, MySQL usa UTF-8' },
+  { category: 'Inteiro pequeno', sqlserver: 'TINYINT (0-255)', mysql: 'TINYINT (-128 a 127)', notes: 'SQL Server é unsigned por padrão' },
+  { category: 'Inteiro médio', sqlserver: 'SMALLINT', mysql: 'SMALLINT', notes: 'Ambos: -32,768 a 32,767' },
+  { category: 'Inteiro grande', sqlserver: 'INT', mysql: 'INT / INTEGER', notes: 'Idênticos: -2B a +2B' },
+  { category: 'Inteiro muito grande', sqlserver: 'BIGINT', mysql: 'BIGINT', notes: 'Idênticos: ±9 quintilhões' },
+  { category: 'Decimal exato', sqlserver: 'DECIMAL(p,s) / NUMERIC(p,s)', mysql: 'DECIMAL(p,s)', notes: 'NUMERIC é alias no SQL Server' },
+  { category: 'Ponto flutuante', sqlserver: 'FLOAT(n) / REAL', mysql: 'FLOAT / DOUBLE', notes: 'SQL Server: FLOAT(53) = DOUBLE' },
+  { category: 'Moeda', sqlserver: 'MONEY / SMALLMONEY', mysql: 'DECIMAL(19,4)', notes: 'MySQL não tem tipo MONEY nativo' },
+  { category: 'Data e Hora', sqlserver: 'DATETIME', mysql: 'DATETIME', notes: 'SQL Server: 1/300s, MySQL: 1s' },
+  { category: 'Data e Hora (precisão)', sqlserver: 'DATETIME2(n)', mysql: 'DATETIME(n)', notes: 'MySQL 5.6.4+ suporta frações' },
+  { category: 'Apenas data', sqlserver: 'DATE', mysql: 'DATE', notes: 'Idênticos: YYYY-MM-DD' },
+  { category: 'Apenas hora', sqlserver: 'TIME(n)', mysql: 'TIME(n)', notes: 'MySQL TIME pode armazenar horas negativas' },
+  { category: 'Timestamp UTC', sqlserver: 'DATETIMEOFFSET', mysql: 'TIMESTAMP', notes: 'MySQL TIMESTAMP é sempre UTC' },
+  { category: 'Booleano', sqlserver: 'BIT', mysql: 'BOOLEAN / TINYINT(1)', notes: 'BOOLEAN é alias para TINYINT(1)' },
+  { category: 'Binário (fixo)', sqlserver: 'BINARY(n)', mysql: 'BINARY(n)', notes: 'Idênticos' },
+  { category: 'Binário (variável)', sqlserver: 'VARBINARY(n)', mysql: 'VARBINARY(n)', notes: 'Idênticos' },
+  { category: 'Binário (grande)', sqlserver: 'VARBINARY(MAX)', mysql: 'BLOB / MEDIUMBLOB / LONGBLOB', notes: 'MySQL tem 3 níveis BLOB' },
+  { category: 'GUID/UUID', sqlserver: 'UNIQUEIDENTIFIER', mysql: 'CHAR(36) / BINARY(16)', notes: 'MySQL não tem tipo UUID nativo' },
+  { category: 'JSON', sqlserver: 'NVARCHAR(MAX) com validação', mysql: 'JSON', notes: 'MySQL 5.7+ tem tipo JSON nativo' },
+  { category: 'XML', sqlserver: 'XML', mysql: 'TEXT / VARCHAR', notes: 'MySQL não tem suporte XML nativo' },
+  { category: 'Espacial', sqlserver: 'GEOMETRY / GEOGRAPHY', mysql: 'POINT / LINESTRING / POLYGON', notes: 'MySQL tem tipos espaciais limitados' }
+]
+
+const functionsComparison = [
+  { name: 'Último ID inserido', sqlserver: 'SCOPE_IDENTITY()', mysql: 'LAST_INSERT_ID()' },
+  { name: 'Concatenação', sqlserver: 'col1 + col2 ou CONCAT(col1, col2)', mysql: 'CONCAT(col1, col2)' },
+  { name: 'Substring', sqlserver: 'SUBSTRING(str, start, len)', mysql: 'SUBSTRING(str, start, len)' },
+  { name: 'Length', sqlserver: 'LEN(str)', mysql: 'LENGTH(str) / CHAR_LENGTH(str)' },
+  { name: 'Upper/Lower', sqlserver: 'UPPER() / LOWER()', mysql: 'UPPER() / LOWER()' },
+  { name: 'Trim', sqlserver: 'LTRIM() / RTRIM()', mysql: 'TRIM() / LTRIM() / RTRIM()' },
+  { name: 'Replace', sqlserver: 'REPLACE(str, old, new)', mysql: 'REPLACE(str, old, new)' },
+  { name: 'Data atual', sqlserver: 'GETDATE()', mysql: 'NOW() / CURRENT_TIMESTAMP' },
+  { name: 'Data UTC', sqlserver: 'SYSUTCDATETIME()', mysql: 'UTC_TIMESTAMP()' },
+  { name: 'Extrair ano/mês/dia', sqlserver: 'YEAR() / MONTH() / DAY()', mysql: 'YEAR() / MONTH() / DAY()' },
+  { name: 'DATEDIFF', sqlserver: 'DATEDIFF(day, date1, date2)', mysql: 'DATEDIFF(date1, date2)' },
+  { name: 'DATEADD', sqlserver: 'DATEADD(day, 5, date)', mysql: 'DATE_ADD(date, INTERVAL 5 DAY)' },
+  { name: 'ISNULL', sqlserver: 'ISNULL(col, valor)', mysql: 'IFNULL(col, valor) / COALESCE()' },
+  { name: 'CASE', sqlserver: 'CASE WHEN x THEN y ELSE z END', mysql: 'CASE WHEN x THEN y ELSE z END' },
+  { name: 'CAST/CONVERT', sqlserver: 'CAST(val AS INT) / CONVERT(INT, val)', mysql: 'CAST(val AS UNSIGNED)' },
+  { name: 'Formatar data', sqlserver: 'FORMAT(date, ''dd/MM/yyyy'')', mysql: 'DATE_FORMAT(date, ''%d/%m/%Y'')' },
+  { name: 'Row Number', sqlserver: 'ROW_NUMBER() OVER()', mysql: 'ROW_NUMBER() OVER() (v8.0+)' },
+  { name: 'Limit results', sqlserver: 'SELECT TOP 10 * FROM t', mysql: 'SELECT * FROM t LIMIT 10' },
+  { name: 'Auto-increment', sqlserver: 'IDENTITY(1,1)', mysql: 'AUTO_INCREMENT' }
+]
+
+const featuresComparison = [
+  { title: 'Stored Procedures', icon: 'heroicons:folder', sqlserver: 'Suporte completo com T-SQL', mysql: 'Suporte básico, sintaxe diferente' },
+  { title: 'Triggers', icon: 'heroicons:bolt', sqlserver: 'INSTEAD OF e AFTER triggers', mysql: 'Apenas AFTER triggers (limitado)' },
+  { title: 'Views Materializadas', icon: 'heroicons:table-cells', sqlserver: 'Indexed Views', mysql: 'Não suportado nativamente' },
+  { title: 'CTEs (Common Table Expressions)', icon: 'heroicons:share', sqlserver: 'Completo suporte', mysql: 'Suportado desde 8.0+' },
+  { title: 'Window Functions', icon: 'heroicons:chart-bar', sqlserver: 'Completo (ROW_NUMBER, RANK, etc)', mysql: 'Suportado desde 8.0+' },
+  { title: 'Full-Text Search', icon: 'heroicons:magnifying-glass', sqlserver: 'CONTAINS / FREETEXT', mysql: 'MATCH() AGAINST()' },
+  { title: 'Partitioning', icon: 'heroicons:rectangle-group', sqlserver: 'Table/Index partitioning', mysql: 'Suporte limitado (RANGE, LIST, HASH)' },
+  { title: 'Compression', icon: 'heroicons:arrow-down-on-square', sqlserver: 'Row/Page compression', mysql: 'InnoDB compression básica' },
+  { title: 'Encryption', icon: 'heroicons:lock-closed', sqlserver: 'TDE, Always Encrypted', mysql: 'InnoDB tablespace encryption' },
+  { title: 'Backup', icon: 'heroicons:cloud-arrow-up', sqlserver: 'BACKUP DATABASE nativo', mysql: 'mysqldump / mysqlbackup externo' },
+  { title: 'Transaction Log', icon: 'heroicons:document-text', sqlserver: 'Transaction Log separado', mysql: 'Redo Log no tablespace' },
+  { title: 'Locking Hints', icon: 'heroicons:key', sqlserver: 'WITH (NOLOCK), WITH (HOLDLOCK)', mysql: 'FOR UPDATE / LOCK IN SHARE MODE' },
+  { title: 'Dynamic SQL', icon: 'heroicons:code-bracket-square', sqlserver: 'EXEC / sp_executesql', mysql: 'PREPARE / EXECUTE statements' },
+  { title: 'Error Handling', icon: 'heroicons:exclamation-triangle', sqlserver: 'TRY...CATCH', mysql: 'DECLARE HANDLER' },
+  { title: 'Temporary Tables', icon: 'heroicons:archive-box', sqlserver: '#temp (local) / ##temp (global)', mysql: 'CREATE TEMPORARY TABLE' },
+  { title: 'Table Variables', icon: 'heroicons:variable', sqlserver: '@table variables', mysql: 'Não suportado' },
+  { title: 'Sequences', icon: 'heroicons:numbers', sqlserver: 'CREATE SEQUENCE', mysql: 'Não suportado (usa AUTO_INCREMENT)' },
+  { title: 'MERGE Statement', icon: 'heroicons:arrows-right-left', sqlserver: 'MERGE INTO', mysql: 'INSERT ... ON DUPLICATE KEY UPDATE' },
+  { title: 'PIVOT/UNPIVOT', icon: 'heroicons:arrows-up-down', sqlserver: 'PIVOT / UNPIVOT nativo', mysql: 'Requires CASE ou JOIN manual' },
+  { title: 'Collation', icon: 'heroicons:language', sqlserver: 'Case-insensitive por padrão', mysql: 'Case-sensitive depende da collation' }
+]
+
+const migrationTips = [
+  'Substitua todos os ISNULL() por IFNULL() ou COALESCE()',
+  'Converta DATETIME para DATETIME ou TIMESTAMP conforme necessidade de timezone',
+  'Mude UNIQUEIDENTIFIER para CHAR(36) ou BINARY(16) para UUIDs',
+  'Ajuste VARCHAR(MAX) para TEXT ou LONGTEXT dependendo do tamanho esperado',
+  'Reescreva DATEADD() usando DATE_ADD() com sintaxe INTERVAL',
+  'Troque GETDATE() por NOW() ou CURRENT_TIMESTAMP',
+  'Converta SCOPE_IDENTITY() para LAST_INSERT_ID()',
+  'Adapte stored procedures: sintaxe T-SQL ≠ MySQL',
+  'Verifique collations: SQL Server é case-insensitive, MySQL depende da configuração',
+  'Teste queries com window functions se usar MySQL < 8.0',
+  'Substitua MERGE por INSERT ... ON DUPLICATE KEY UPDATE',
+  'Converta tipos MONEY para DECIMAL(19,4)',
+  'Ajuste queries que usam TOP para usar LIMIT',
+  'Revise triggers: MySQL só suporta AFTER triggers',
+  'Valide expressões regulares: sintaxe diferente entre os bancos'
 ]
 
 useHead({
