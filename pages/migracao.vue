@@ -482,7 +482,7 @@ const functionsComparison = [
   { name: 'ISNULL', sqlserver: 'ISNULL(col, valor)', mysql: 'IFNULL(col, valor) / COALESCE()' },
   { name: 'CASE', sqlserver: 'CASE WHEN x THEN y ELSE z END', mysql: 'CASE WHEN x THEN y ELSE z END' },
   { name: 'CAST/CONVERT', sqlserver: 'CAST(val AS INT) / CONVERT(INT, val)', mysql: 'CAST(val AS UNSIGNED)' },
-  { name: 'Formatar data', sqlserver: 'FORMAT(date, ''dd/MM/yyyy'')', mysql: 'DATE_FORMAT(date, ''%d/%m/%Y'')' },
+  { name: 'Formatar data', sqlserver: "FORMAT(date, 'dd/MM/yyyy')", mysql: "DATE_FORMAT(date, '%d/%m/%Y')" },
   { name: 'Row Number', sqlserver: 'ROW_NUMBER() OVER()', mysql: 'ROW_NUMBER() OVER() (v8.0+)' },
   { name: 'Limit results', sqlserver: 'SELECT TOP 10 * FROM t', mysql: 'SELECT * FROM t LIMIT 10' },
   { name: 'Auto-increment', sqlserver: 'IDENTITY(1,1)', mysql: 'AUTO_INCREMENT' }
